@@ -6,12 +6,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     @GetMapping("/me")
-    public OAuth2User currentUser(@AuthenticationPrincipal OAuth2User user){
-        return user;
+    public Map<String, Object> currentUser(@AuthenticationPrincipal OAuth2User user){
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("email", user.getAttribute("email"));
+        response.put("name", user.getAttribute("name"));
+        response.put("roles", user.getAuthorities());
+
+        return response;
     }
 }
