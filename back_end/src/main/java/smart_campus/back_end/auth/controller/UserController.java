@@ -1,11 +1,12 @@
 package smart_campus.back_end.auth.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import smart_campus.back_end.auth.dto.UserResponse;
+import smart_campus.back_end.auth.mapper.UserMapper;
 import smart_campus.back_end.auth.model.User;
-import smart_campus.back_end.auth.repository.UserRepository;
+import smart_campus.back_end.auth.service.UserService;
 
 import java.util.List;
 
@@ -13,37 +14,42 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+
+    private final UserMapper userMapper;
+
+    public UserController(UserMapper userMapper, UserService userService){
+        this.userMapper = userMapper;
+        this.userService = userService;
+    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<User> getUser(@PathVariable String id){
-        User user = userRepository.findById(id).orElseThrow();
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> getUser(@PathVariable String id){
+        User user = userService.findById(id);
+        return ResponseEntity.ok(userMapper.toUserResponse(user));
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email){
-        User user = userRepository.findByEmail(email).orElseThrow();
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email){
+        User user = userService.findByEmail(email);
+        return ResponseEntity.ok(userMapper.toUserResponse(user));
     }
 
     @PutMapping("/{id}/roles")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<User> updateRoles(@PathVariable String id, @RequestBody List<String> roles){
-        User user = userRepository.findById(id).orElseThrow();
+    public ResponseEntity<UserResponse> updateRoles(@PathVariable String id, @RequestBody List<String> roles){
+        User user = userService.findById(id);
 
         user.setRoles(roles);
 
-        userRepository.save(user);
-
-        return ResponseEntity.ok(user);
+        userService.saveUser(user);
+        return ResponseEntity.ok(userMapper.toUserResponse(user));
     }
 }
