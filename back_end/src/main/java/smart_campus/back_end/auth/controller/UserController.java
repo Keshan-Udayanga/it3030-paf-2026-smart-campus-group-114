@@ -27,6 +27,11 @@ public class UserController {
         return userRepository.findById(id).orElseThrow();
     }
 
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@PathVariable String email){
+        return userRepository.findByEmail(email).orElseThrow();
+    }
+
     @PutMapping("/{id}/roles")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public User updateRoles(@PathVariable String id, @RequestBody List<String> roles){
