@@ -8,7 +8,7 @@ import smart_campus.back_end.auth.dto.UserResponse;
 import smart_campus.back_end.auth.mapper.UserMapper;
 import smart_campus.back_end.auth.model.User;
 import smart_campus.back_end.auth.service.UserService;
-
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import java.util.List;
 
 @RestController
@@ -35,13 +35,23 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserResponse> getUser(@PathVariable String id){
         User user = userService.findById(id);
-        return ResponseEntity.ok(userMapper.toUserResponse(user));
+        UserResponse response = userMapper.toUserResponse(user);
+        response.add(linkTo(methodOn(UserController.class).getUser(id)).withSelfRel());
+
+        response.add(linkTo(methodOn(UserController.class)
+                    .updateRoles(id, null)).withRel("updateRoles"));
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email){
         User user = userService.findByEmail(email);
-        return ResponseEntity.ok(userMapper.toUserResponse(user));
+        UserResponse response = userMapper.toUserResponse(user);
+
+        response.add(linkTo(methodOn(UserController.class)
+                .getUserByEmail(email)).withSelfRel());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/roles")
@@ -52,6 +62,10 @@ public class UserController {
         user.setRoles(request.roles());
 
         userService.saveUser(user);
-        return ResponseEntity.ok(userMapper.toUserResponse(user));
+        UserResponse response = userMapper.toUserResponse(user);
+
+        response.add(linkTo(methodOn(UserController.class)
+                .getUser(id)).withSelfRel());
+        return ResponseEntity.ok(response);
     }
 }

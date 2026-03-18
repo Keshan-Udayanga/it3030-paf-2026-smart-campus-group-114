@@ -4,18 +4,15 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
-public class UserResponse extends RepresentationModel<UserResponse> {
-    private String id;
+public class AuthResponse extends RepresentationModel<AuthResponse> {
     private String name;
     private String email;
     private List<String> roles;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public AuthResponse(String name, String email, List<String> roles) {
+        this.name = name;
+        this.email = email;
+        this.roles = roles;
     }
 
     public String getName() {

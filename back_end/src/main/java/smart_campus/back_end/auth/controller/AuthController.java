@@ -1,12 +1,15 @@
 package smart_campus.back_end.auth.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import smart_campus.back_end.auth.dto.AuthResponse;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -14,18 +17,27 @@ import java.util.Map;
 public class AuthController {
 
     @GetMapping("/me")
-    public Map<String, Object> currentUser(@AuthenticationPrincipal OAuth2User user){
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<AuthResponse> currentUser(@AuthenticationPrincipal OAuth2User user){
+        if(user == null){
+            return ResponseEntity.status(401).build();
+        }
+        List<String> roles = user.getAuthorities().stream()
+                .map(auth -> auth.getAuthority())
+                .toList();
 
-        response.put("email", user.getAttribute("email"));
-        response.put("name", user.getAttribute("name"));
-        response.put("roles", user.getAuthorities());
+        AuthResponse response = new AuthResponse(
+                user.getAttribute("email"),
+                user.getAttribute("name"),
+                roles
+        );
 
-        return response;
+        response.add(linkTo(methodOn(AuthController.class).currentUser(user)).withSelfRel());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/status")
-    public Map<String, Object> status(){
-        return Map.of("status", "authenticated");
+    public ResponseEntity<Map<String, String>> status(){
+        return ResponseEntity.ok(Map.of("status", "authenticated"));
     }
 }
