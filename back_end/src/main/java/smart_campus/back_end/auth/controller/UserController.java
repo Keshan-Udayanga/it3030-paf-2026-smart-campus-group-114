@@ -3,6 +3,7 @@ package smart_campus.back_end.auth.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import smart_campus.back_end.auth.dto.UpdateUserRolesRequest;
 import smart_campus.back_end.auth.dto.UserResponse;
 import smart_campus.back_end.auth.mapper.UserMapper;
 import smart_campus.back_end.auth.model.User;
@@ -45,10 +46,10 @@ public class UserController {
 
     @PutMapping("/{id}/roles")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<UserResponse> updateRoles(@PathVariable String id, @RequestBody List<String> roles){
+    public ResponseEntity<UserResponse> updateRoles(@PathVariable String id, @RequestBody UpdateUserRolesRequest request){
         User user = userService.findById(id);
 
-        user.setRoles(roles);
+        user.setRoles(request.roles());
 
         userService.saveUser(user);
         return ResponseEntity.ok(userMapper.toUserResponse(user));
