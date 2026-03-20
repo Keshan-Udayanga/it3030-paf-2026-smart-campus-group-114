@@ -29,13 +29,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2User.getAttribute("email"); // normalize email
         String name = oAuth2User.getAttribute("name");
 
-        System.out.println("OAuth2 login for email: " + email);
 
         // Save user if not exists
         User user = userRepository.findByEmail(email).orElseGet(() -> {
             User newUser = new User(name, email, Collections.singletonList("ROLE_STUDENT"), "google");
             User saved = userRepository.save(newUser);
-            System.out.println("User saved in MongoDB: " + saved.getEmail());
             return saved;
         });
         System.out.printf("newuser" + user.getEmail());
