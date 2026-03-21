@@ -33,5 +33,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         System.out.println(token);
         response.getWriter().write(token);
         response.setContentType("application/json");
+        response.getWriter().write("{\"token\":\"" + token + "\"}");
     }
 }
