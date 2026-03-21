@@ -21,6 +21,7 @@ public class AuthController {
         if(user == null){
             return ResponseEntity.status(401).build();
         }
+        System.out.println("/me triggered");
         List<String> roles = user.getAuthorities().stream()
                 .map(auth -> auth.getAuthority())
                 .toList();

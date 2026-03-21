@@ -34,6 +34,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = userRepository.findByEmail(email).orElseGet(() -> {
             User newUser = new User(name, email, Collections.singletonList("ROLE_STUDENT"), "google");
             User saved = userRepository.save(newUser);
+
             return saved;
         });
         System.out.printf("newuser" + user.getEmail());

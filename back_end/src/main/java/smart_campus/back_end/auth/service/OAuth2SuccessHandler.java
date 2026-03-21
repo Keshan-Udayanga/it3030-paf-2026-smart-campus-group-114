@@ -20,6 +20,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Autowired
     private UserService userService;
 
+    @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication)
@@ -29,6 +30,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         User user = userService.findByEmail(email);
 
         String token = jwtService.generateToken(user);
+        System.out.println(token);
         response.getWriter().write(token);
         response.setContentType("application/json");
     }

@@ -5,11 +5,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 import smart_campus.back_end.auth.model.User;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
 public class JWTService {
-    private String SECRET_KEY = "my-secret-key";
+    private SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
     public String generateToken(User user){
         return Jwts.builder()
