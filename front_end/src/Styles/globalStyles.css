@@ -1,0 +1,13 @@
+:root {
+  --bg-main: #F5F7FA;
+  --primary: #1F6F78;
+  --accent: #F2A541;
+  --text-dark: #1a1a1a;
+  --text-light: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-main);
+}

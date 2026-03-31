@@ -1,0 +1,85 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 15px 40px;
+  background-color: var(--primary);
+  color: white;
+  position: relative;
+  z-index: 999;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-around; /* evenly distribute */
+  align-items: center;           /* vertical alignment */
+  list-style: none;
+  width: 40%;                    /* adjust width to control spacing */
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  cursor: pointer;
+}
+
+.login-btn {
+  background-color: var(--accent);
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Mobile Menu Icon */
+.mobile-menu-icon {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 1000; /* ensures always on top */
+  position: relative;
+}
+
+/* ===== MOBILE ===== */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 60%;
+    height: 100vh;
+    background-color: var(--primary);
+    padding-top: 80px;
+    gap: 25px;
+    transition: right 0.3s ease-in-out;
+    z-index: 998; /* below mobile icon */
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .login-btn {
+    display: none; /* hide desktop login */
+  }
+
+  .login-mobile {
+    display: block;
+    color: white;
+  }
+
+  .mobile-menu-icon {
+    display: block;
+    position: fixed; /* FIXED so it stays above menu */
+    top: 20px;       /* adjust distance from top */
+    right: 20px;     /* adjust distance from right */
+    z-index: 1000;   /* above sliding menu */
+  }
+}
