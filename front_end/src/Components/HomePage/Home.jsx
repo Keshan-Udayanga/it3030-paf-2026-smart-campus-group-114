@@ -1,7 +1,8 @@
 import React from "react";
-import "./HeroSection.css";
+import "./Home.css";
+import { Link } from "react-router-dom";
 
-const HeroSection = () => {
+const Home = () => {
   return (
     <section className="hero">
       <div className="hero-overlay">
@@ -17,7 +18,9 @@ const HeroSection = () => {
 
           <div className="hero-buttons">
             <a href="#resources" className="btn btn-primary">
-              Browse Resources
+              <Link to="/resources" className="btn btn-primary">
+                Browse Resources
+              </Link>
             </a>
             <a href="#booking" className="btn btn-secondary">
               Book a Resource
@@ -29,4 +32,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default Home;
