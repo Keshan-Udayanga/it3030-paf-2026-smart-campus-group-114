@@ -1,0 +1,93 @@
+:root {
+  --primary: #10b981; /* green base */
+  --secondary: #0f766e; 
+  --background: #f0fdf4;
+  --text-dark: #111827;
+  --text-light: #ffffff;
+  --text-muted: #6b7280;
+}
+
+.resources-page {
+  padding: 60px 20px;
+  background-color: var(--background);
+  min-height: 90vh;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--text-dark);
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.resource-card {
+  background: var(--text-light);
+  padding: 25px 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.25);
+}
+
+.resource-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+}
+
+.resource-card p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.resource-card .active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.resource-card .inactive {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.card-buttons {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-buttons button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
