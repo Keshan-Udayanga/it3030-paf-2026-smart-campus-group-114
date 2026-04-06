@@ -1,0 +1,170 @@
+/* NAVBAR BASE */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: var(--primary-dark); /* 60% base */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+/* CONTAINER */
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 90px;
+  padding: 0 40px;
+  position: relative;
+}
+
+/* LOGO */
+.navbar-logo img {
+  width: 38%;
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo img:hover {
+  transform: scale(1.05);
+}
+
+/* CENTER MENU */
+.navbar-menu {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 35px;
+}
+
+/* NAV LINKS */
+.nav-link {
+  font-family:  sans-serif;
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: 0.3s ease;
+}
+
+/* Hover underline animation */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: var(--text-light);
+  transition: 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--text-light);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* RIGHT SIDE */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* LOGIN BUTTON */
+.login-btn {
+  padding: 10px 28px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: var(--text-light);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.login-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+}
+
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-dark);
+  border-radius: 2px;
+  transition: 0.3s ease;
+}
+
+/* MOBILE DESIGN */
+@media (max-width: 768px) {
+
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-menu {
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    transform: none;
+    flex-direction: column;
+    width: 100%;
+
+    background: var(--primary); /* 60% soft background */
+    padding: 25px ;
+    gap: 20px;
+
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+
+    transition: 0.4s ease;
+  }
+
+  .navbar-menu.active {
+    left: 0;
+  }
+
+  .nav-link {
+    font-size: 16px;
+  }
+
+  .navbar-actions {
+    display: none;
+  }
+
+  /* Hamburger animation */
+  .bar.active:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .bar.active:nth-child(2) {
+    opacity: 0;
+  }
+
+  .bar.active:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}

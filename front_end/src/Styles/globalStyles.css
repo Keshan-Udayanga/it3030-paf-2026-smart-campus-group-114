@@ -1,0 +1,43 @@
+/* src/styles/global.css */
+:root {
+  /* 60% → MAIN (light background) */
+  --background: #f6fbf7;
+  --bg-soft: #eef7f0;
+
+  /* 30% → SECONDARY (soft green UI areas) */
+  --secondary: #d1fae5;
+  --secondary-dark: #a7f3d0;
+
+  /* 10% → ACCENT (main actions, buttons) */
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --accent: #34d399;
+
+  /* TEXT COLORS */
+  --text-dark: #1f2937;
+  --text-light: #ffffff;
+  --text-muted: #6b7280;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
