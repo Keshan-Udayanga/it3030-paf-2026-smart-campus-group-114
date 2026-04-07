@@ -31,7 +31,7 @@ const NavBar = () => {
 
         {/* RIGHT - LOGIN BUTTON */}
         <div className="navbar-actions">
-          <button className="login-btn">Login</button>
+          <Link to="/login"><button className="login-btn">Login</button></Link>
         </div>
 
         {/* HAMBURGER */}
