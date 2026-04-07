@@ -20,10 +20,10 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<AuthResponse> currentUser(Authentication authentication){
-        if(authentication == null){
+        if(authentication == null || !authentication.isAuthenticated()){
             return ResponseEntity.status(401).build();
         }
-        System.out.println("/me triggered");
+
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = customUserDetails.getUser();
 
@@ -32,8 +32,6 @@ public class AuthController {
                 user.getName(),
                 user.getRoles()
         );
-
-        response.add(linkTo(methodOn(AuthController.class).currentUser((Authentication) user)).withSelfRel());
 
         return ResponseEntity.ok(response);
     }
