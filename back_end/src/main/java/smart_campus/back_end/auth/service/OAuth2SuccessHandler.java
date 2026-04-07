@@ -30,8 +30,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         User user = userService.findByEmail(email);
 
         String token = jwtService.generateToken(user);
+        String redirectUrl = "http://localhost:3000/dashboard?token=" + token;
         System.out.println(token);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"token\":\"" + token + "\"}");
+
+        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
