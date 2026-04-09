@@ -7,6 +7,7 @@ import Resources from './Components/ResourceManagement/Resources';
 import LoginPage from './userManagement/pages/LoginPage';
 import AdminDashboard from './userManagement/pages/AdminDashboard';
 import UserDashboard from './userManagement/pages/UserDashboard';
+import UsersPage from './userManagement/pages/UsersPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<UsersPage />} />
       </Routes>
       <Footer />
       </BrowserRouter>

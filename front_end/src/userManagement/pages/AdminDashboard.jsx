@@ -33,8 +33,9 @@ function AdminDashboard() {
       <div className="admin-sidebar">
         <h2>Admin</h2>
         <ul>
-          <li>Dashboard</li>
-          <li>Users</li>
+          <li>
+            Dashboard</li>
+          <li onClick={() => window.location.href="/admin/users"}>Users</li>
           <li>Resources</li>
           <li>Settings</li>
         </ul>

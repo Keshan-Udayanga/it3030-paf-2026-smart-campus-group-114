@@ -1,0 +1,108 @@
+/* ROOT CONTAINER WITH BACKGROUND IMAGE */
+.users-container {
+  padding: 40px 20px;
+  min-height: 100vh;
+  color: white;
+
+  /* 🔥 Background with gradient overlay */
+  background: linear-gradient(
+      rgba(15, 23, 42, 0.9),
+      rgba(16, 185, 129, 0.2)
+    ),
+    url("../../../public/assets/adminbg.jpg") center/cover no-repeat;
+
+  backdrop-filter: blur(2px);
+}
+
+/* TITLE */
+.users-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* TABLE WRAPPER (glass effect) */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  background: rgba(30, 41, 59, 0.7); /* glass */
+  backdrop-filter: blur(10px);
+
+  border-radius: 12px;
+  overflow: hidden;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* HEADER */
+.users-table th {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  padding: 14px;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ROWS */
+.users-table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* HOVER EFFECT */
+.users-table tr {
+  transition: 0.2s ease;
+}
+
+.users-table tr:hover {
+  background: rgba(51, 65, 85, 0.7);
+  transform: scale(1.01);
+}
+
+/* BUTTONS */
+.btn-role {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border: none;
+  padding: 6px 14px;
+  margin-right: 6px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.3s ease;
+}
+
+.btn-role-secondary {
+  background: transparent;
+  border: 1px solid #10b981;
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: #10b981;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.3s ease;
+}
+
+/* BUTTON HOVER */
+.btn-role:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+}
+
+.btn-role-secondary:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .users-table th,
+  .users-table td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
