@@ -7,7 +7,6 @@ function AdminDashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    window.history.replaceState({}, document.title, "/admin-dashboard");
 
     axios.get("http://localhost:8080/api/v1/auth/me", {
       headers: { Authorization: `Bearer ${token}` }
@@ -18,42 +17,52 @@ function AdminDashboard() {
       window.location.href = "/";
     });
 
-
   }, []);
 
   return (
-    <div className="container mt-5">
-      <h2>Admin Dashboard</h2>
+    <div className="admin-container">
 
-      {user && <p>Welcome, {user.name}</p>}
+      {/* SIDEBAR */}
+      <div className="admin-sidebar">
+        <h2>Admin</h2>
+        <ul>
+          <li>Dashboard</li>
+          <li>Users</li>
+          <li>Resources</li>
+          <li>Settings</li>
+        </ul>
+      </div>
 
-      <div className="row mt-4">
+      {/* MAIN CONTENT */}
+      <div className="admin-main">
 
-        {/* USERS CARD */}
-        <div className="col-md-4">
-          <div className="card p-3 shadow">
-            <h5>Total Users</h5>
-            <h3>120</h3>
-            <p>Manage system users</p>
-          </div>
+        {/* TOPBAR */}
+        <div className="admin-topbar">
+          <h3>Admin Dashboard</h3>
+          {user && <span>Welcome, {user.name}</span>}
         </div>
 
-        {/* RESOURCES CARD */}
-        <div className="col-md-4">
-          <div className="card p-3 shadow">
-            <h5>Resources</h5>
-            <h3>45</h3>
-            <p>Manage campus resources</p>
-          </div>
-        </div>
+        {/* CARDS */}
+        <div className="admin-cards">
 
-        {/* SYSTEM STATUS */}
-        <div className="col-md-4">
-          <div className="card p-3 shadow">
-            <h5>System Status</h5>
-            <h3>Active</h3>
-            <p>All systems running</p>
+          <div className="admin-card">
+            <h4>Total Users</h4>
+            <p className="card-value">120</p>
+            <span>Manage system users</span>
           </div>
+
+          <div className="admin-card">
+            <h4>Resources</h4>
+            <p className="card-value">45</p>
+            <span>Manage campus resources</span>
+          </div>
+
+          <div className="admin-card">
+            <h4>System Status</h4>
+            <p className="card-value status-active">Active</p>
+            <span>All systems running</span>
+          </div>
+
         </div>
 
       </div>

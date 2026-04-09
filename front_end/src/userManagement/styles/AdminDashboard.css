@@ -1,8 +1,113 @@
-.card {
-  border-radius: 12px;
+/* ADMIN DASHBOARD ROOT */
+.admin-container {
+  display: flex;
+  height: 100vh;
+  background-color: #0f172a; /* dark background */
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+}
+
+/* SIDEBAR */
+.admin-sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, #10b981, #065f46);
+  padding: 20px;
+}
+
+.admin-sidebar h2 {
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar li {
+  padding: 12px 10px;
+  border-radius: 8px;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-.card:hover {
+.admin-sidebar li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* MAIN AREA */
+.admin-main {
+  flex: 1;
+  padding: 20px 30px;
+}
+
+/* TOPBAR */
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.admin-topbar h3 {
+  font-size: 1.8rem;
+}
+
+.admin-topbar span {
+  color: #34d399;
+}
+
+/* CARDS GRID */
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.admin-card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  transition: 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.admin-card:hover {
   transform: translateY(-5px);
+}
+
+/* CARD TEXT */
+.admin-card h4 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #94a3b8;
+}
+
+.card-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #10b981;
+}
+
+.status-active {
+  color: #22c55e;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .admin-sidebar ul {
+    display: flex;
+    gap: 15px;
+  }
 }
