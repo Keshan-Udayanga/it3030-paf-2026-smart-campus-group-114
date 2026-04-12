@@ -12,7 +12,11 @@ function AdminDashboard() {
     axios.get("http://localhost:8080/api/v1/auth/me", {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => setUser(res.data))
+    .then(res => {
+      setUser(res.data);
+      localStorage.setItem("userName", res.data.name);
+      window.dispatchEvent(new Event("authChanged"));
+    })
     .catch(() => {
       localStorage.removeItem("token");
       window.location.href = "/";

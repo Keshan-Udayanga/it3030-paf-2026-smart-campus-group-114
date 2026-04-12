@@ -8,6 +8,7 @@ function UserDashboard() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     let token = params.get("token");
+    
 
     if (token) {
       localStorage.setItem("token", token);
