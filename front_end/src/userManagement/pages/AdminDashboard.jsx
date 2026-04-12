@@ -29,17 +29,7 @@ function AdminDashboard() {
   return (
     <div className="admin-container">
 
-      {/* SIDEBAR */}
-      <div className="admin-sidebar">
-        <h2>Admin</h2>
-        <ul>
-          <li>
-            Dashboard</li>
-          <li onClick={() => window.location.href="/admin/users"}>Users</li>
-          <li>Resources</li>
-          <li>Settings</li>
-        </ul>
-      </div>
+      
 
       {/* MAIN CONTENT */}
       <div className="admin-main">

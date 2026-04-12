@@ -8,6 +8,7 @@ import LoginPage from './userManagement/pages/LoginPage';
 import AdminDashboard from './userManagement/pages/AdminDashboard';
 import UserDashboard from './userManagement/pages/UserDashboard';
 import UsersPage from './userManagement/pages/UsersPage';
+import AdminLayout from './userManagement/pages/AdminLayout';
 
 function App() {
   return (
@@ -19,8 +20,10 @@ function App() {
         <Route path="/resources" element={<Resources />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/login" element={<LoginPage/>} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<UsersPage />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="users" element={<UsersPage />} />
+        </Route>
       </Routes>
       <Footer />
       </BrowserRouter>

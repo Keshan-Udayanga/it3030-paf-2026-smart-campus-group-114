@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ function UserDashboard() {
 
     if (token) {
       localStorage.setItem("token", token);
-      window.history.replaceState({}, document.title, "/dashboard");
+      window.history.replaceState({}, document.title, "/user-dashboard");
     } else {
       token = localStorage.getItem("token");
       if (!token) {
@@ -27,7 +27,7 @@ function UserDashboard() {
       const roles = res.data.roles;
       //ROLE-BASED REDIRECT
       if (roles.includes("ROLE_ADMIN")) {
-        navigate("/admin-dashboard");
+        navigate("/admin/dashboard");
       } else {
         navigate("/user-dashboard");
       }
