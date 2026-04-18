@@ -38,7 +38,7 @@
   background: #020617;
 }
 
-.active {
+.admin-layout .active {
   background: #10b981;
   color: white;
 }
