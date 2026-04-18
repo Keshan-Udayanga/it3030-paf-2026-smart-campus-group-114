@@ -1,0 +1,47 @@
+package smart_campus.back_end.notification.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import smart_campus.back_end.notification.model.Notification;
+import smart_campus.back_end.notification.repository.NotificationRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class NotificationService {
+    @Autowired
+    private final NotificationRepository repository;
+
+    public NotificationService(NotificationRepository repository){
+        this.repository = repository;
+    }
+
+    public List<Notification> getUserNotifications(String userId){
+        return repository.findByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    public Notification createNotification(String userId, String message, String type){
+        Notification notification = Notification.builder()
+                .userId(userId)
+                .message(message)
+                .type(type)
+                .isRead(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        return repository.save(notification);
+    }
+
+    public void markAsRead(String id) {
+        Notification notification = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
+
+        notification.setRead(true);
+        repository.save(notification);
+    }
+
+    public long getUnreadCount(String userId) {
+        return repository.countByUserIdAndIsReadFalse(userId);
+    }
+}
