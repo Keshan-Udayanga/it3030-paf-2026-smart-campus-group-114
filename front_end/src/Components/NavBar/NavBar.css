@@ -163,6 +163,66 @@
   opacity: 0.85;
 }
 
+/* NOTIFICATION WRAPPER */
+.notification-wrapper {
+  position: relative;
+  margin-right: 15px;
+}
+
+/* ICON */
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  color: var(--text-dark);
+  transition: 0.3s ease;
+}
+
+.notification-icon:hover {
+  color: var(--text-light);
+  transform: scale(1.1);
+}
+
+/* BADGE */
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 50%;
+}
+
+/* DROPDOWN */
+.notification-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 280px;
+
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(12px);
+
+  border-radius: 12px;
+  padding: 15px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+/* ITEM */
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.9rem;
+}
+
+/* UNREAD HIGHLIGHT */
+.notification-item.unread {
+  background: rgba(16, 185, 129, 0.15);
+}
+
 /* HAMBURGER */
 .hamburger {
   display: none;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { FiBell } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import './NavBar.css';
 
 const NavBar = () => {
@@ -7,6 +9,9 @@ const NavBar = () => {
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -20,11 +25,23 @@ const NavBar = () => {
     } else {
       setUser(null);
     }
+
+    axios.get("http://localhost:8080/api/v1/notifications", {
+    headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => setNotifications(res.data))
+    .catch(err => console.error(err));
+
+    axios.get("http://localhost:8080/api/v1/notifications/unread-count", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => setUnreadCount(res.data))
+    .catch(err => console.error(err));;
   };
 
   loadUser(); // initial load
 
-  // 👇 listen for login/logout changes
+  // listen for login/logout changes
   window.addEventListener("authChanged", loadUser);
 
   //Outside Click Handler
@@ -75,32 +92,66 @@ const NavBar = () => {
           <a href="#contact" className="nav-link" onClick={toggleMenu}>Contact Us</a>
         </div>
 
-        {/* RIGHT - LOGIN BUTTON */}
+        {/* RIGHT - LOGIN BUTTON and Notification Bell */}
         <div className="navbar-actions">
 
           {!user ? (
-            // NOT LOGGED IN
+            //NOT LOGGED IN
             <Link to="/login">
               <button className="login-btn">Login</button>
             </Link>
           ) : (
             // LOGGED IN
-            <div className="user-avatar-wrapper" ref={dropdownRef}>
-              <div 
-                className="user-avatar"
-                onClick={() => setShowDropdown(true)}
-              >
-                {user.name.charAt(0).toUpperCase()}
+            <>
+              {/* Notification Bell */}
+              <div className="notification-wrapper">
+                <div 
+                  className="notification-icon"
+                  onClick={() => setShowNotifications(!showNotifications)}
+                >
+                  <FiBell size={22} />
+
+                  {unreadCount > 0 && (
+                    <span className="badge">{unreadCount}</span>
+                  )}
+                </div>
+
+                {showNotifications && (
+                  <div className="notification-dropdown">
+                    <h4>Notifications</h4>
+
+                    {notifications.length === 0 && <p>No notifications</p>}
+
+                    {notifications.map(n => (
+                      <div 
+                        key={n.id} 
+                        className={`notification-item ${n.isRead ? "" : "unread"}`}
+                      >
+                        <p>{n.message}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {showDropdown && (
-                <div className="user-dropdown">
-                  <p className="user-name">{user.name}</p>
-                  <button onClick={handleDashboard}>Dashboard</button>
-                  <button onClick={handleLogout}>Logout</button>
+              {/* Avatar */}
+              <div className="user-avatar-wrapper" ref={dropdownRef}>
+                <div 
+                  className="user-avatar"
+                  onClick={() => setShowDropdown(true)}
+                >
+                  {user.name.charAt(0).toUpperCase()}
                 </div>
-              )}
-            </div>
+
+                {showDropdown && (
+                  <div className="user-dropdown">
+                    <p className="user-name">{user.name}</p>
+                    <button onClick={handleDashboard}>Dashboard</button>
+                    <button onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
+              </div>
+            </>
           )}
 
         </div>
