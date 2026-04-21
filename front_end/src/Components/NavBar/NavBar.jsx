@@ -41,6 +41,9 @@ const NavBar = () => {
 
   loadUser(); // initial load
 
+  //POLLING every 5 sec
+  const interval = setInterval(loadUser, 5000);
+
   // listen for login/logout changes
   window.addEventListener("authChanged", loadUser);
 
@@ -54,6 +57,7 @@ const NavBar = () => {
   document.addEventListener("mousedown", handleClickOutside);
 
   return () => {
+    clearInterval(interval);
     window.removeEventListener("authChanged", loadUser);
     document.removeEventListener("mousedown", handleClickOutside);
   };
