@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiBell } from "react-icons/fi";
+import { FiBell, FiCheck } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import './NavBar.css';
@@ -74,6 +74,25 @@ const NavBar = () => {
     window.location.href = "/user-dashboard";
   }
 
+  const markAsRead = (id) => {
+    const token = localStorage.getItem("token");
+
+    axios.put(
+      `http://localhost:8080/api/v1/notifications/${id}/read`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    .then(() => {
+      // update UI without reload
+      setNotifications(prev =>
+        prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+      );
+
+      setUnreadCount(prev => Math.max(prev - 1, 0));
+    })
+    .catch(err => console.error(err));
+  };
+
   return (
     <nav className="navbar">
       <div className="container navbar-container">
@@ -108,7 +127,7 @@ const NavBar = () => {
             // LOGGED IN
             <>
               {/* Notification Bell */}
-              <div className="notification-wrapper">
+              <div className="notification-wrapper" >
                 <div 
                   className="notification-icon"
                   onClick={() => setShowNotifications(!showNotifications)}
@@ -121,17 +140,25 @@ const NavBar = () => {
                 </div>
 
                 {showNotifications && (
-                  <div className="notification-dropdown">
+                  <div className="notification-dropdown" >
                     <h4>Notifications</h4>
 
                     {notifications.length === 0 && <p>No notifications</p>}
 
-                    {notifications.map(n => (
+                    {notifications.slice(0,5).map(n => (
                       <div 
                         key={n.id} 
                         className={`notification-item ${n.isRead ? "" : "unread"}`}
                       >
                         <p>{n.message}</p>
+                        {!n.isRead && (
+                          <button 
+                            className="mark-read-btn"
+                            onClick={() => markAsRead(n.id)}
+                          >
+                            <FiCheck size={16} />
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
