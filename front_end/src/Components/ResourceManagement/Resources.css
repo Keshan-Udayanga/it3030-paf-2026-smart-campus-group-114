@@ -1,5 +1,4 @@
 /* Resources.css */
-
 .resources-page {
   padding: 40px;
 }
@@ -61,6 +60,11 @@ input {
   outline: none;
   font-family: inherit;
   transition: border-color 0.2s;
+  width: 100%;
+}
+
+.search-box input{
+  width: 80%;
 }
 
 input:focus {
@@ -148,7 +152,7 @@ button {
 
 .action-buttons {
   display: flex;
-  gap: 20px;
+  gap: 8px;
 }
 
 .action-buttons button {
@@ -158,19 +162,58 @@ button {
   font-weight: 500;
 }
 
-.btn-book { background: var(--secondary); color: var(--primary-dark); }
-.btn-book:hover { background: var(--secondary-dark); }
+.btn-book {
+  background: var(--secondary);
+  color: var(--primary-dark);
+}
 
-.btn-edit { background: #e0f2fe; color: #0369a1; }
-.btn-edit:hover { background: #bae6fd; }
+.btn-book:hover {
+  background: var(--secondary-dark);
+}
 
-.btn-delete { background: #ffe4e6; color: #be123c; }
-.btn-delete:hover { background: #fecdd3; }
+.btn-edit {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.btn-edit:hover {
+  background: #bae6fd;
+}
+
+.btn-delete {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.btn-delete:hover {
+  background: #fecdd3;
+}
 
 .no-data {
   text-align: center;
   padding: 40px;
   color: var(--text-muted);
+}
+
+/* ===== STATUS (same style as type) ===== */
+.status-pill {
+  background: var(--secondary);
+  color: var(--primary-dark);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Optional color change */
+.status-pill.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.inactive {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 /* ============================= */
