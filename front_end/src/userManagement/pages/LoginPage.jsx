@@ -4,7 +4,19 @@ import "../styles/loginPage.css";
 function LoginPage() {
     const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => setShowModal(true), []);
+    useEffect(() => {
+                        setShowModal(true);
+
+                        const params = new URLSearchParams(window.location.search);
+                        const error = params.get("error");
+
+                        if (error === "invalid_domain") {
+                            alert("Only SLIIT emails are allowed.");
+                        } else if (error === "access_denied") {
+                            alert("Login failed. Please try again.");
+                        }
+                    }, []);
+                    
     const handleGoogleLogin = () => {
         window.location.href = "http://localhost:8080/oauth2/authorization/google";
     };
