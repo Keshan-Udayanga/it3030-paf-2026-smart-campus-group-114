@@ -19,8 +19,7 @@ public class Resource {
     private int capacity;
     private String location;
     private String status; // ACTIVE / OUT_OF_SERVICE
-    private LocalTime availableFrom;
-    private LocalTime availableTo;
+
 
     public String getId() {
         return id;
@@ -68,21 +67,5 @@ public class Resource {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalTime getAvailableFrom() {
-        return availableFrom;
-    }
-
-    public void setAvailableFrom(LocalTime availableFrom) {
-        this.availableFrom = availableFrom;
-    }
-
-    public LocalTime getAvailableTo() {
-        return availableTo;
-    }
-
-    public void setAvailableTo(LocalTime availableTo) {
-        this.availableTo = availableTo;
     }
 }

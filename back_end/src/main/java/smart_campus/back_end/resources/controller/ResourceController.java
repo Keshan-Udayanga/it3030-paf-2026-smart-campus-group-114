@@ -22,6 +22,11 @@ public class ResourceController {
         this.services = services;
     }
 
+    @PostMapping("/add")
+    public ResourceDTO addResource(@RequestBody ResourceDTO resourceDTO){
+        return services.addResources(resourceDTO);
+    }
+
     // get all resources details
     @GetMapping
     public List<EntityModel<ResourceDTO>> getAllResources(){

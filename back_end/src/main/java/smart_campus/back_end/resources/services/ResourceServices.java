@@ -18,7 +18,7 @@ public class ResourceServices{
     private final ResourceMapper resourceMapper;
 
     // save resources
-    public ResourceDTO saveResources(ResourceDTO dto){
+    public ResourceDTO addResources(ResourceDTO dto){
         Resource r = resourceMapper.toEntity(dto);
         Resource saved = resourceRepo.save(r);
         return resourceMapper.toDTO(saved);

@@ -1,12 +1,16 @@
 package smart_campus.back_end.resources.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResourceDTO {
 
     private String id;
@@ -15,8 +19,6 @@ public class ResourceDTO {
     private int capacity;
     private String location;
     private String status;
-    private LocalTime availableFrom;
-    private LocalTime availableTo;
 
     public String getId() {
         return id;
@@ -66,19 +68,4 @@ public class ResourceDTO {
         this.status = status;
     }
 
-    public LocalTime getAvailableFrom() {
-        return availableFrom;
-    }
-
-    public void setAvailableFrom(LocalTime availableFrom) {
-        this.availableFrom = availableFrom;
-    }
-
-    public LocalTime getAvailableTo() {
-        return availableTo;
-    }
-
-    public void setAvailableTo(LocalTime availableTo) {
-        this.availableTo = availableTo;
-    }
 }

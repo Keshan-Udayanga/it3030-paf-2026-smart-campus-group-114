@@ -14,8 +14,6 @@ public class ResourceMapper {
                 .status(dto.getStatus())
                 .capacity(dto.getCapacity())
                 .location(dto.getLocation())
-                .availableFrom(dto.getAvailableFrom())
-                .availableTo(dto.getAvailableTo())
                 .build();
     }
 
@@ -27,8 +25,6 @@ public class ResourceMapper {
                 .capacity(r.getCapacity())
                 .location(r.getLocation())
                 .status(r.getStatus())
-                .availableFrom(r.getAvailableFrom())
-                .availableTo(r.getAvailableTo())
                 .build();
     }
 }
