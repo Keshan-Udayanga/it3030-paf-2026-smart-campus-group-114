@@ -83,4 +83,16 @@ public class UserController {
     public ResponseEntity<Long> getUserCount(){
         return ResponseEntity.ok(userService.countUsers());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        User user = userService.findById(id);
+
+        // Prevent deleting admins (important safeguard)
+        if (user.getRoles().equals("ROLE_ADMIN")) {
+            throw new RuntimeException("Cannot delete admin users");
+        }
+        userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    }
 }
