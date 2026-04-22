@@ -71,6 +71,8 @@ function UsersPage() {
                   onChange={(e) => updateRole(user.id, e.target.value)}
                 >
                   <option value="ROLE_USER">User</option>
+                  <option value="ROLE_RESOURCE_MANAGER">Resource_Manager</option>
+                  <option value="ROLE_TECHNICIAN">Technician</option>
                   <option value="ROLE_ADMIN">Admin</option>
                 </select>
               </td>

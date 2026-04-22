@@ -26,11 +26,12 @@ function UserDashboard() {
     })
     .then(res => {
       const roles = res.data.roles;
+      localStorage.setItem("userName", res.data.name);
       //ROLE-BASED REDIRECT
       if (roles.includes("ROLE_ADMIN")) {
         navigate("/admin/dashboard");
       } else {
-        navigate("/user-dashboard");
+        navigate("/");
       }
     })
     .catch(() => {

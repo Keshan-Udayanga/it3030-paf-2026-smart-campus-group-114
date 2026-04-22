@@ -128,7 +128,7 @@
 
 /* ROLE SELECT DROPDOWN */
 .users-table select {
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 20px;
 
   background: rgba(30, 41, 59, 0.9);
