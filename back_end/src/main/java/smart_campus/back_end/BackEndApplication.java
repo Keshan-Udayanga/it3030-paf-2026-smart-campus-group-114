@@ -3,6 +3,7 @@ package smart_campus.back_end;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 @SpringBootApplication
 public class BackEndApplication {
 
