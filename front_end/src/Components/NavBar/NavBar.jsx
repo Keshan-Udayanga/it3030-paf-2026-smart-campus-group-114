@@ -118,7 +118,7 @@ const NavBar = () => {
           <Link to="/resources" className="nav-link" onClick={toggleMenu}>
             Resources
           </Link>
-          <a href="#services" className="nav-link" onClick={toggleMenu}>Resources</a>
+          <a href="#services" className="nav-link" onClick={toggleMenu}>Tickets</a>
           <a href="#services" className="nav-link" onClick={toggleMenu}>Services</a>
           <a href="#contact" className="nav-link" onClick={toggleMenu}>Contact Us</a>
         </div>

@@ -11,29 +11,29 @@ function UsersPage() {
     u.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  
+
   useEffect(() => {
     axios.get("http://localhost:8080/api/v1/users", {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => setUsers(res.data))
-    .catch(err => console.error(err));
+      .then(res => setUsers(res.data))
+      .catch(err => console.error(err));
   }, []);
-  
+
   const updateRole = (id, newRole) => {
     axios.put(
       `http://localhost:8080/api/v1/users/${id}/roles`,
       { roles: [newRole] },
       { headers: { Authorization: `Bearer ${token}` } }
     )
-    .then(res => {
-      setUsers(prev =>
-        prev.map(u =>
-          u.id === id ? { ...u, roles: [newRole] } : u
-        )
-      );
-    })
-    .catch(err => console.error(err));
+      .then(res => {
+        setUsers(prev =>
+          prev.map(u =>
+            u.id === id ? { ...u, roles: [newRole] } : u
+          )
+        );
+      })
+      .catch(err => console.error(err));
   };
 
   return (
