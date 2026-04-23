@@ -40,5 +40,10 @@ public class ResourceServices{
         return resourceMapper.toDTO(resource);
     }
 
+    // DELETE
+    public void deleteResource(String id) {
+        resourceRepo.deleteById(id);
+    }
+
 
 }

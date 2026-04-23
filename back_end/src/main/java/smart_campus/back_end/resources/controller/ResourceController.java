@@ -22,6 +22,7 @@ public class ResourceController {
         this.services = services;
     }
 
+    // add new resources
     @PostMapping("/add")
     public ResourceDTO addResource(@RequestBody ResourceDTO resourceDTO){
         return services.addResources(resourceDTO);
@@ -39,10 +40,16 @@ public class ResourceController {
                 .toList();
     }
 
-    // optional (needed for proper self links)
+    // get resource details by resource ID
     @GetMapping("/{id}")
     public ResourceDTO getResourceById(@PathVariable("id") String id){
         return services.getResourceById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteResource(@PathVariable String id) {
+        services.deleteResource(id);
+        return "Deleted successfully";
     }
     
 }
