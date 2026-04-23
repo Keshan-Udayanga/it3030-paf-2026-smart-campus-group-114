@@ -1,0 +1,119 @@
+.notifications-page {
+  padding: 40px 20px;
+  min-height: 100vh;
+  color: white;
+
+  background: linear-gradient(
+      rgba(15, 23, 42, 0.95),
+      rgba(16, 185, 129, 0.15)
+    ),
+    url("../../../public/assets/adminbg.jpg") center/cover no-repeat;
+}
+
+/* TITLE */
+.notifications-page h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* LIST */
+.notifications-list {
+  max-width: 800px;
+  margin: auto;
+}
+
+/* CARD */
+.notification-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 15px;
+  margin-bottom: 12px;
+
+  border-radius: 12px;
+
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+
+  transition: 0.3s ease;
+}
+
+/* UNREAD */
+.notification-card.unread {
+  border-left: 4px solid #10b981;
+}
+
+/* READ */
+.notification-card.read {
+  opacity: 0.6;
+}
+
+/* HOVER */
+.notification-card:hover {
+  transform: translateY(-2px);
+  background: rgba(51, 65, 85, 0.7);
+}
+
+/* CONTENT */
+.notification-content p {
+  margin: 0;
+}
+
+.time {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+/* BUTTON */
+.notification-card button {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.notification-card button:hover {
+  transform: translateY(-1px);
+}
+
+/* FILTER BAR */
+.notification-filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+/* BUTTON BASE */
+.notification-filters button {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid #10b981;
+  background: transparent;
+  color: #10b981;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* ACTIVE */
+.notification-filters button.active {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* HOVER */
+.notification-filters button:hover {
+  transform: translateY(-2px);
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AddResource.css";
 
 const AddResource = () => {
@@ -9,11 +10,11 @@ const AddResource = () => {
     name: "",
     type: "LECTURE_HALL",
     capacity: "",
-    location: "",
+    location: "Building A",
     status: "ACTIVE",
-    availableFrom: "",
-    availableTo: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -22,23 +23,40 @@ const AddResource = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    setLoading(true);
 
-    // 👉 later: axios.post(...)
-    alert("Resource Added Successfully!");
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/resources/add",
+        formData,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      );
 
-    navigate("/");
+      console.log("Saved:", response.data);
+
+      alert("Resource Added Successfully!");
+
+      navigate("/admin/resource-management");
+    } catch (error) {
+      console.log("Error:", error);
+
+      alert("Failed to add resource. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <section className="add-resource-page">
       <div className="form-container">
-
         <div className="form-header">
           <h2>Add New Resource</h2>
+
           <button onClick={() => navigate(-1)} className="btn-back">
             ← Back
           </button>
@@ -46,7 +64,6 @@ const AddResource = () => {
 
         <form onSubmit={handleSubmit} className="resource-form">
           <div className="form-grid">
-
             {/* NAME */}
             <div className="form-group">
               <label>Resource Name</label>
@@ -85,10 +102,10 @@ const AddResource = () => {
             <div className="form-group">
               <label>Location</label>
               <select name="location" onChange={handleChange}>
-                <option>Building A</option>
-                <option>Building B</option>
-                <option>Building C</option>
-                <option>Main Hall</option>
+                <option value="Building A">Building A</option>
+                <option value="Building B">Building B</option>
+                <option value="Building C">Building C</option>
+                <option value="Main Hall">Main Hall</option>
               </select>
             </div>
 
@@ -100,11 +117,10 @@ const AddResource = () => {
                 <option value="OUT_OF_SERVICE">Out of Service</option>
               </select>
             </div>
-
           </div>
 
-          <button type="submit" className="btn-submit">
-            Add Resource
+          <button type="submit" className="btn-submit" disabled={loading}>
+            {loading ? "Saving..." : "Add Resource"}
           </button>
         </form>
       </div>

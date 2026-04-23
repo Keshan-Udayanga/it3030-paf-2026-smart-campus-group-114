@@ -59,7 +59,9 @@ const Resources = () => {
     setLoading(true);
 
     axios
-      .get("http://localhost:8082/api/resources")
+      .get("http://localhost:8080/api/resources", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
       .then((res) => {
         setResources(Array.isArray(res.data) ? res.data : []);
         setLoading(false);
