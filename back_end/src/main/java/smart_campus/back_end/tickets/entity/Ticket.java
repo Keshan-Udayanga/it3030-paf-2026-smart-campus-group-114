@@ -1,41 +1,32 @@
 package smart_campus.back_end.tickets.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "tickets")
+@Document(collection = "tickets")
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false, unique = true)
     private String ticketCode;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 2000)
     private String description;
 
-    @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
     private String priority;
 
-    @Column(nullable = false)
     private String status;
 
     private String location;
     private String resourceName;
 
-    @Column(nullable = false)
     private String preferredContactName;
 
-    @Column(nullable = false)
     private String preferredContactEmail;
 
     private String preferredContactPhone;
@@ -47,23 +38,11 @@ public class Ticket {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.status = "OPEN";
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

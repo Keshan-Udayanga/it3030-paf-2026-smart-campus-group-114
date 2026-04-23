@@ -8,6 +8,8 @@ import smart_campus.back_end.tickets.repository.TicketRepository;
 import smart_campus.back_end.tickets.service.TicketService;
 
 import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -31,7 +33,14 @@ public class TicketServiceImpl implements TicketService {
         ticket.setPreferredContactEmail(ticketRequestDTO.getPreferredContactEmail());
         ticket.setPreferredContactPhone(ticketRequestDTO.getPreferredContactPhone());
         ticket.setStatus("OPEN");
+        ticket.setCreatedAt(LocalDateTime.now());
+        ticket.setUpdatedAt(LocalDateTime.now());
 
         return ticketRepository.save(ticket);
+    }
+
+    @Override
+    public List<Ticket> getAllTickets() {
+        return ticketRepository.findAll();
     }
 }

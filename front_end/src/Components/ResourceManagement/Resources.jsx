@@ -8,7 +8,7 @@ const Resources = () => {
 
   useEffect(() => {
     // Example API endpoint, replace with your Spring Boot API
-    axios.get("http://localhost:8081/api/resources")
+    axios.get("http://localhost:8080/api/resources")
       .then((res) => {
         setResources(res.data);
         setLoading(false);

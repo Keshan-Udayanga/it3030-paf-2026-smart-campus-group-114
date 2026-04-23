@@ -1,5 +1,7 @@
 package smart_campus.back_end.tickets.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +22,11 @@ public class TicketController {
     public ResponseEntity<Ticket> createTicket(@RequestBody TicketRequestDTO ticketRequestDTO) {
         Ticket createdTicket = ticketService.createTicket(ticketRequestDTO);
         return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
+    }
+
+    // READ ALL
+    @GetMapping
+    public ResponseEntity<List<Ticket>> getAllTickets() {
+        return ResponseEntity.ok(ticketService.getAllTickets());
     }
 }
