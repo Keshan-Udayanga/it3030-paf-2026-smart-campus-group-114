@@ -32,7 +32,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         //Validate the domain of the emails
         if (email == null ||
-                !(email.toLowerCase().endsWith("@sliit.lk") || email.toLowerCase().endsWith("@gmail.com"))) {
+                !(email.toLowerCase().endsWith("@my.sliit.lk") || email.toLowerCase().endsWith("@gmail.com"))) {
             throw new UnauthorizedDomainException("Unauthorized email domain");
         }
 
@@ -40,6 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (name == null || name.isBlank()) {
             name = "User";
         }
+
         String finalName = name;
         // Save user if not exists
         User user = userRepository.findByEmail(email).orElseGet(() -> {
