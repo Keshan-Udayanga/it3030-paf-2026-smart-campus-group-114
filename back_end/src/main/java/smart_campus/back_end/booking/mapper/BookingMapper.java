@@ -1,31 +1,27 @@
 package smart_campus.back_end.booking.mapper;
 
-import smart_campus.back_end.booking.DTO.BookingRequestDTO;
-import smart_campus.back_end.booking.DTO.BookingResponseDTO;
-import smart_campus.back_end.booking.model.booking;
-import smart_campus.back_end.booking.model.BookingStatus;
+import smart_campus.back_end.booking.dto.BookingResponse;
+import smart_campus.back_end.booking.model.Booking;
+
 public class BookingMapper {
-    public static booking toEntity(BookingRequestDTO dto) {
-        return booking.builder()
-                .resourceId(dto.getResourceId())
-                .startTime(dto.getStartTime())
-                .endTime(dto.getEndTime())
-                .purpose(dto.getPurpose())
-                .expectedAttendees(dto.getExpectedAttendees())
-                .status(BookingStatus.PENDING)
-                .build();
+
+    private BookingMapper() {
     }
 
-    public static BookingResponseDTO toDTO(booking booking) {
-        return BookingResponseDTO.builder()
+    public static BookingResponse toResponse(Booking booking) {
+        return BookingResponse.builder()
                 .id(booking.getId())
                 .resourceId(booking.getResourceId())
+                .userId(booking.getUserId())
+                .bookingDate(booking.getBookingDate())
                 .startTime(booking.getStartTime())
                 .endTime(booking.getEndTime())
                 .purpose(booking.getPurpose())
                 .expectedAttendees(booking.getExpectedAttendees())
                 .status(booking.getStatus())
                 .adminReason(booking.getAdminReason())
+                .createdAt(booking.getCreatedAt())
+                .updatedAt(booking.getUpdatedAt())
                 .build();
     }
 }

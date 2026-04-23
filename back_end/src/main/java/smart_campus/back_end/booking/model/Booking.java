@@ -1,5 +1,5 @@
 package smart_campus.back_end.booking.model;
-import smart_campus.back_end.booking.model.BookingStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,28 +7,33 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
-@Document(collection = "booking")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class booking {
+@Document(collection = "bookings")
+public class Booking {
+
     @Id
     private String id;
 
     private String resourceId;
+    private String userId;
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
+    private LocalDate bookingDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     private String purpose;
+    private Integer expectedAttendees;
 
-    private int expectedAttendees;
+    private BookingStatus status;
+    private String adminReason;
 
-    private BookingStatus status; // PENDING, APPROVED, REJECTED, CANCELLED
-
-    private String adminReason; // approval/rejection reason
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
