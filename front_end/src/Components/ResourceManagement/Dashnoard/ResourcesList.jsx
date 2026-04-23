@@ -34,6 +34,9 @@ function ResourcesList() {
             })
             .then(() => {
                 setResources(resources.filter((r) => r.id !== id));
+
+                // navigate to dashboard
+                navigate("/admin/resource-management");
             })
             .catch((err) => console.error(err));
     };

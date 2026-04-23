@@ -45,5 +45,11 @@ public class ResourceController {
     public ResourceDTO getResourceById(@PathVariable("id") String id){
         return services.getResourceById(id);
     }
-    
+
+
+    @DeleteMapping("/{id}")
+    public String deleteResource(@PathVariable String id) {
+        services.deleteResource(id);
+        return "Deleted successfully";
+    }
 }
