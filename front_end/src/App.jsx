@@ -14,6 +14,7 @@ import ResourceManagementDashboard from './Components/ResourceManagement/Dashnoa
 import AddResource from './Components/ResourceManagement/Dashnoard/AddResource';
 import ResourcesList from "./Components/ResourceManagement/Dashnoard/ResourcesList";
 import UpdateResource from "./Components/ResourceManagement/Dashnoard/UpdateResource";
+import Services from './Components/Services/Services';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/user-dashboard" element={<UserDashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<AdminLayout />}>

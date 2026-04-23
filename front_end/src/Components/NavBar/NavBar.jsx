@@ -118,9 +118,15 @@ const NavBar = () => {
           <Link to="/resources" className="nav-link" onClick={toggleMenu}>
             Resources
           </Link>
-          <a href="#services" className="nav-link" onClick={toggleMenu}>Tickets</a>
-          <a href="#services" className="nav-link" onClick={toggleMenu}>Services</a>
-          <a href="#contact" className="nav-link" onClick={toggleMenu}>Contact Us</a>
+          <Link to="/services" className="nav-link" onClick={toggleMenu}>
+            Services
+          </Link>
+          <Link to="/tickets" className="nav-link" onClick={toggleMenu}>
+            Tickets
+          </Link>
+          <Link to="/contact" className="nav-link" onClick={toggleMenu}>
+            Contact Us
+          </Link>
         </div>
 
         {/* RIGHT - LOGIN BUTTON and Notification Bell */}
