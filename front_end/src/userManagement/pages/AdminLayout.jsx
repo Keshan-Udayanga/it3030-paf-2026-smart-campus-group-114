@@ -16,7 +16,7 @@ function AdminLayout() {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
-        if (!res.data.roles.includes("ROLE_ADMIN")) {
+        if (!res.data.roles.includes("ROLE_ADMIN") && !res.data.roles.includes("ROLE_RESOURCE_MANAGER")) {
         window.location.href = "/";
         } else {
         setUser(res.data);
@@ -41,6 +41,10 @@ function AdminLayout() {
 
           <li className={location.pathname === "/admin/users" ? "active" : ""}onClick={() => navigate("/admin/users")}>
             Users
+          </li>
+
+          <li className={location.pathname === "/resource-management" ? "active" : ""}onClick={() => navigate("/admin/resource-management")}>
+            Resource Management
           </li>
         </ul>
       </div>

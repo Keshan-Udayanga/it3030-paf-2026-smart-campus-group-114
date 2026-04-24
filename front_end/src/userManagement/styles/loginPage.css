@@ -7,11 +7,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-      var(--text-dark),
-      rgba(16, 185, 129, 0.2)
-    ),
-    url("../../../public/assets/heroBg.jpg") center center / cover no-repeat;
   font-family: 'Arial', sans-serif;
 }
 

@@ -1,0 +1,323 @@
+:root {
+  --r-bg: #020617;
+  --r-surface: #f8fafc;
+  --r-card: #ffffff;
+  --r-navy: #0f172a;
+  --r-emerald: #10b981;
+  --r-slate: #64748b;
+  --r-border: #e2e8f0;
+  --r-glow: rgba(16, 185, 129, 0.2);
+}
+
+/* =========================
+   PAGE WRAPPER
+========================= */
+
+.resources-page {
+  padding: 50px;
+  background: var(--r-surface);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--r-navy);
+  letter-spacing: -1px;
+}
+
+/* =========================
+   FILTER CARD (MODERN GLASS)
+========================= */
+
+.filter-card {
+  background: var(--r-navy);
+  padding: 25px;
+  border-radius: 18px;
+  border: 1px solid var(--r-border);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+
+  margin-bottom: 35px;
+  transition: 0.3s;
+}
+
+.filter-card:hover {
+  box-shadow: 0 20px 50px rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* SEARCH */
+.search-box {
+  flex: 2;
+  min-width: 260px;
+}
+
+.search-box input {
+  width: 100%;
+}
+
+/* TIME FILTERS */
+.time-filters {
+  flex: 3;
+  display: flex;
+  gap: 15px;
+}
+
+/* INPUT GROUP */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--r-slate);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+input {
+  padding: 12px 14px;
+  border: 1px solid var(--r-border);
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+  font-family: inherit;
+  background: #f8fafc;
+}
+
+input:focus {
+  border-color: var(--r-emerald);
+  box-shadow: 0 0 0 4px var(--r-glow);
+  background: white;
+}
+
+/* =========================
+   TABLE CONTAINER
+========================= */
+
+.table-container {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--r-border);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+}
+
+/* TABLE */
+.resources-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* HEADER */
+.resources-table th {
+  background: #f1f5f9;
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--r-navy);
+  font-weight: 700;
+  border-bottom: 1px solid var(--r-border);
+}
+
+/* ROW */
+.resources-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--r-border);
+  color: var(--r-slate);
+}
+
+/* HOVER ROW */
+.resources-table tbody tr {
+  transition: 0.3s;
+}
+
+.resources-table tbody tr:hover {
+  background: var(--secondary);
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge-type {
+  background: #ecfdf5;
+  color: var(--r-emerald);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* STATUS */
+.status-pill {
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-pill.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================
+   BUTTONS (MODERN)
+========================= */
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.3s;
+}
+
+/* BOOK BUTTON */
+.btn-book {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.btn-book:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(16,185,129,0.3);
+}
+
+.btn-book:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* EDIT */
+.btn-edit {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.btn-edit:hover {
+  background: #bae6fd;
+}
+
+/* DELETE */
+.btn-delete {
+  background: #ffe4e6;
+  color: #be123c;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.btn-delete:hover {
+  background: #fecdd3;
+}
+
+/* NO DATA */
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: var(--r-slate);
+}
+/* =========================
+   FIX: FILTER CENTERING (MOBILE UX)
+========================= */
+
+@media (max-width: 1024px) {
+  .filter-card {
+    align-items: stretch;
+  }
+
+  .search-box,
+  .time-filters {
+    width: 100%;
+  }
+
+  .time-filters {
+    flex-direction: column;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    display: block;
+  }
+
+  .resources-table {
+    min-width: 700px; /* KEY FIX: forces scroll */
+  }
+
+
+}
+@media (max-width: 768px) {
+
+  .table-container {
+    overflow-x: auto;
+    display: block;
+  }
+
+  .resources-table {
+    min-width: 700px; /* KEY FIX: forces scroll */
+  }
+
+  .action-buttons {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .btn-book {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+}
+
+/* EXTRA SMALL DEVICES */
+@media (max-width: 480px) {
+
+  .filter-card {
+    padding: 15px;
+  }
+
+  .input-group label {
+    text-align: center;
+    width: 100%;
+  }
+
+  .input-group input {
+    text-align: center;
+  }
+}

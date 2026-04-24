@@ -18,7 +18,7 @@ const Footer = () => {
         <div className="footer-col">
           <h4>Contact Us</h4>
           <p>Email: hello@brand.io</p>
-          <p>Phone: +1 (555) 123-4567</p>
+          <p>Phone: +94 77 890 7002</p>
         </div>
       </div>
       <div className="footer-bottom">

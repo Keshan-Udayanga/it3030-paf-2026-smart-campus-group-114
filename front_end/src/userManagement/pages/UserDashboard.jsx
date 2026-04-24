@@ -27,7 +27,7 @@ function UserDashboard() {
     .then(res => {
       const roles = res.data.roles;
       //ROLE-BASED REDIRECT
-      if (roles.includes("ROLE_ADMIN")) {
+      if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_RESOURCE_MANAGER")) {
         navigate("/admin/dashboard");
       } else {
         navigate("/user-dashboard");

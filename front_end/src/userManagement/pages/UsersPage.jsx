@@ -11,29 +11,29 @@ function UsersPage() {
     u.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  
+
   useEffect(() => {
     axios.get("http://localhost:8080/api/v1/users", {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => setUsers(res.data))
-    .catch(err => console.error(err));
+      .then(res => setUsers(res.data))
+      .catch(err => console.error(err));
   }, []);
-  
+
   const updateRole = (id, newRole) => {
     axios.put(
       `http://localhost:8080/api/v1/users/${id}/roles`,
       { roles: [newRole] },
       { headers: { Authorization: `Bearer ${token}` } }
     )
-    .then(res => {
-      setUsers(prev =>
-        prev.map(u =>
-          u.id === id ? { ...u, roles: [newRole] } : u
-        )
-      );
-    })
-    .catch(err => console.error(err));
+      .then(res => {
+        setUsers(prev =>
+          prev.map(u =>
+            u.id === id ? { ...u, roles: [newRole] } : u
+          )
+        );
+      })
+      .catch(err => console.error(err));
   };
 
   return (
@@ -71,6 +71,7 @@ function UsersPage() {
                   onChange={(e) => updateRole(user.id, e.target.value)}
                 >
                   <option value="ROLE_USER">User</option>
+                  <option value="ROLE_RESOURCE_MANAGER">Resource Manager</option>
                   <option value="ROLE_ADMIN">Admin</option>
                 </select>
               </td>

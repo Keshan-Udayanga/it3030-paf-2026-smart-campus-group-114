@@ -44,8 +44,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/oauth2/**",
-                                "/login/oauth2/**"
+                                "/login/oauth2/**",
+                                "/api/resources"
                         ).permitAll()
+                        .requestMatchers("/api/resources/**").hasAnyRole("ADMIN","RESOURCE_MANAGER")
                         .requestMatchers("/api/v1/notifications/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")

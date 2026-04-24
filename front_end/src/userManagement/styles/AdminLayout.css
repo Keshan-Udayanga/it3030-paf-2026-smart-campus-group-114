@@ -5,7 +5,7 @@
 
 /* SIDEBAR */
 .admin-sidebar {
-  width: 220px;
+  width: 250px;
   background: #0f172a;
   color: white;
   padding: 20px;
@@ -35,7 +35,6 @@
 /* CONTENT */
 .admin-content {
   flex: 1;
-  background: #020617;
 }
 
 .admin-layout .active {

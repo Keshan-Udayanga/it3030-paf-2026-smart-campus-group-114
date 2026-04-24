@@ -1,0 +1,231 @@
+.add-resource-page {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card */
+.form-container {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Title */
+.form-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+/* Form */
+.resource-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* select style */
+select {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--secondary-dark);
+  outline: none;
+  font-family: inherit;
+}
+
+select:focus {
+  border-color: var(--primary);
+}
+
+/* Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--secondary-dark);
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+}
+
+/* Readonly */
+.readonly {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+/* Button */
+.btn-submit {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-submit:hover {
+  background: var(--primary-dark);
+}
+
+.add-resource-page {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card */
+.form-container {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Header */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* Grid Layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* 🔥 2 columns */
+  gap: 20px;
+}
+
+/* Full width row */
+.full-width {
+  grid-column: span 2;
+}
+
+/* Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--secondary-dark);
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+}
+
+/* Readonly */
+.readonly {
+  background: #f1f5f9;
+}
+
+/* Buttons */
+.btn-submit {
+  margin-top: 20px;
+  padding: 12px;
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background: var(--primary-dark);
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.input-error {
+  border: 1px solid #ef4444 !important;
+  box-shadow: 0 0 5px rgba(239, 68, 68, 0.3);
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+/* optional better UX */
+.btn-submit:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .add-resource-page {
+    padding: 20px;
+  }
+
+  .form-container {
+    padding: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    /* 🔥 mobile → single column */
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
