@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AdminBookings.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -79,26 +80,67 @@ function AdminBookings() {
       { decision: "APPROVED" },
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
+    Swal.fire({
+      icon: "success",
+      title: "Approved!",
+      text: "Booking approved successfully",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+
     loadBookings();
   };
 
-  // ---------------- REJECT ----------------
+  // ---------------- REJECT (SWEETALERT2 ADDED) ----------------
   const handleReject = async (id) => {
-    await axios.patch(
-      `http://localhost:8080/api/bookings/${id}/review`,
-      {
-        decision: "REJECTED",
-        adminReason: rejectReasons[id] || "No reason provided",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const reason = rejectReasons[id] || "No reason provided";
 
-    loadBookings();
+    const result = await Swal.fire({
+      title: "Reject Booking?",
+      text: `Reason: ${reason}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Reject",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await axios.patch(
+        `http://localhost:8080/api/bookings/${id}/review`,
+        {
+          decision: "REJECTED",
+          adminReason: reason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Rejected!",
+        text: "Booking rejected successfully",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      loadBookings();
+    } catch (err) {
+      console.log("Reject error", err);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to reject booking",
+      });
+    }
   };
 
   const handleReasonChange = (id, value) => {
@@ -123,6 +165,7 @@ function AdminBookings() {
     }
   };
 
+  // ---------------- UI ----------------
   return (
     <div className="admin-bookings-page">
       <div className="admin-bookings-container">
@@ -171,7 +214,6 @@ function AdminBookings() {
 
                       <div className="detail-box">
 
-                        {/* STATUS */}
                         <div>
                           <strong>Status:</strong>{" "}
                           <span className={`status-badge ${getStatusClass(b.status)}`}>
@@ -179,7 +221,6 @@ function AdminBookings() {
                           </span>
                         </div>
 
-                        {/* ✅ REASON (YOUR REQUIRED SNIPPET INSERTED HERE) */}
                         <div>
                           <strong>Reason:</strong>{" "}
                           {b.status === "PENDING" ? (
@@ -195,7 +236,6 @@ function AdminBookings() {
                           )}
                         </div>
 
-                        {/* ACTIONS */}
                         <div>
                           <strong>Actions:</strong>{" "}
                           {b.status === "PENDING" ? (
