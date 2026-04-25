@@ -22,6 +22,10 @@ import AddResource from "./Components/ResourceManagement/Dashnoard/AddResource";
 import ResourcesList from "./Components/ResourceManagement/Dashnoard/ResourcesList";
 import UpdateResource from "./Components/ResourceManagement/Dashnoard/UpdateResource";
 
+import BookingForm from "./Components/BookingManagement/BookingForm";
+
+import AdminBookings from "./Components/BookingManagement/AdminBookings";
+
 function App() {
   return (
     <BrowserRouter>
@@ -37,6 +41,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/booking/:id" element={<BookingForm />} />
 
         {/* 🛡️ Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
@@ -44,14 +49,13 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<UsersPage />} />
 
-          <Route
-            path="resource-management"
-            element={<ResourceManagementDashboard />}
-          />
+          <Route path="resource-management" element={<ResourceManagementDashboard />} />
 
           <Route path="add-resource" element={<AddResource />} />
           <Route path="resources-list" element={<ResourcesList />} />
           <Route path="update-resource/:id" element={<UpdateResource />} />
+
+          <Route path="booking-management" element={< AdminBookings />} />
 
         </Route>
 

@@ -1,62 +1,110 @@
 import React, { useEffect, useState } from "react";
 import "./AdminBookings.css";
-import { getAllBookings, reviewBooking } from "./BookingAPI";
+import axios from "axios";
 
 function AdminBookings() {
   const [bookings, setBookings] = useState([]);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [resources, setResources] = useState({});
   const [rejectReasons, setRejectReasons] = useState({});
+  const [loading, setLoading] = useState(false);
 
+  const token = localStorage.getItem("token");
+
+  // ---------------- DATE FIX ----------------
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const d = new Date(dateString);
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d - offset).toISOString().split("T")[0];
+  };
+
+  const formatTimePart = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatDatePart = (dateString) => {
+    if (!dateString) return "-";
+    const d = new Date(dateString);
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d - offset).toISOString().split("T")[0];
+  };
+
+  // ---------------- LOAD BOOKINGS ----------------
   const loadBookings = async () => {
     try {
-      const data = await getAllBookings();
-      setBookings(data);
+      const res = await axios.get("http://localhost:8080/api/bookings", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBookings(res.data || []);
     } catch (err) {
-      console.error(err);
-      setError(err?.response?.data?.message || "Failed to load all bookings.");
+      console.log("Booking load error", err);
     }
   };
 
+  // ---------------- LOAD RESOURCES ----------------
+  const loadResources = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/resources", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const map = {};
+      (res.data || []).forEach((item) => {
+        const r = item.content || item;
+        map[r.id] = r.name;
+      });
+
+      setResources(map);
+    } catch (err) {
+      console.log("Resource error", err);
+    }
+  };
+
+  // ---------------- INIT ----------------
   useEffect(() => {
-    loadBookings();
+    setLoading(true);
+    Promise.all([loadBookings(), loadResources()]).finally(() =>
+      setLoading(false)
+    );
   }, []);
 
+  // ---------------- APPROVE ----------------
   const handleApprove = async (id) => {
-    setMessage("");
-    setError("");
-
-    try {
-      await reviewBooking(id, { decision: "APPROVED" });
-      setMessage("Booking approved successfully.");
-      loadBookings();
-    } catch (err) {
-      console.error(err);
-      setError(err?.response?.data?.message || "Failed to approve booking.");
-    }
+    await axios.patch(
+      `http://localhost:8080/api/bookings/${id}/review`,
+      { decision: "APPROVED" },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    loadBookings();
   };
 
+  // ---------------- REJECT ----------------
   const handleReject = async (id) => {
-    setMessage("");
-    setError("");
-
-    try {
-      await reviewBooking(id, {
+    await axios.patch(
+      `http://localhost:8080/api/bookings/${id}/review`,
+      {
         decision: "REJECTED",
-        adminReason: rejectReasons[id] || "Rejected by admin"
-      });
-      setMessage("Booking rejected successfully.");
-      loadBookings();
-    } catch (err) {
-      console.error(err);
-      setError(err?.response?.data?.message || "Failed to reject booking.");
-    }
+        adminReason: rejectReasons[id] || "No reason provided",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    loadBookings();
   };
 
   const handleReasonChange = (id, value) => {
     setRejectReasons((prev) => ({
       ...prev,
-      [id]: value
+      [id]: value,
     }));
   };
 
@@ -78,92 +126,113 @@ function AdminBookings() {
   return (
     <div className="admin-bookings-page">
       <div className="admin-bookings-container">
-        <div className="admin-bookings-header">
-          <h2>🛠️ Admin Booking Review</h2>
-          <button onClick={loadBookings}>Refresh</button>
-        </div>
 
-        {message && <div className="admin-success">{message}</div>}
-        {error && <div className="admin-error">{error}</div>}
+        <h2 className="title">🛠️ Admin Booking Review</h2>
 
-        <div className="admin-bookings-table-wrapper">
-          <table className="admin-bookings-table">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <table className="admin-table">
+
             <thead>
               <tr>
-                <th>Booking ID</th>
-                <th>Resource ID</th>
-                <th>User ID</th>
+                <th>ID</th>
+                <th>Resource</th>
+                <th>User</th>
                 <th>Booking Date</th>
-                <th>Start</th>
-                <th>End</th>
+                <th>Start Date</th>
+                <th>Start Time</th>
+                <th>End Date</th>
+                <th>End Time</th>
                 <th>Purpose</th>
-                <th>Attendees</th>
-                <th>Status</th>
-                <th>Reject Reason</th>
-                <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.id}>
-                  <td>{booking.id}</td>
-                  <td>{booking.resourceId}</td>
-                  <td>{booking.userId}</td>
-                  <td>{booking.bookingDate}</td>
-                  <td>{booking.startDateTime}</td>
-                  <td>{booking.endDateTime}</td>
-                  <td>{booking.purpose}</td>
-                  <td>{booking.expectedAttendees}</td>
-                  <td>
-                    <span className={`status-badge ${getStatusClass(booking.status)}`}>
-                      {booking.status}
-                    </span>
-                  </td>
-                  <td>
-                    {booking.status === "PENDING" ? (
-                      <input
-                        type="text"
-                        placeholder="Enter reject reason"
-                        value={rejectReasons[booking.id] || ""}
-                        onChange={(e) => handleReasonChange(booking.id, e.target.value)}
-                      />
-                    ) : (
-                      booking.adminReason || "-"
-                    )}
-                  </td>
-                  <td>
-                    {booking.status === "PENDING" ? (
-                      <div className="admin-actions">
-                        <button
-                          className="approve-btn"
-                          onClick={() => handleApprove(booking.id)}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          className="reject-btn"
-                          onClick={() => handleReject(booking.id)}
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    ) : (
-                      <span>No actions</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
 
-              {bookings.length === 0 && (
-                <tr>
-                  <td colSpan="11" className="no-bookings-cell">
-                    No bookings found.
-                  </td>
-                </tr>
-              )}
+            <tbody>
+              {bookings.map((b, i) => (
+                <React.Fragment key={b.id || i}>
+
+                  {/* ROW 1 */}
+                  <tr className="main-row">
+                    <td>{i + 1}</td>
+                    <td>{resources[b.resourceId] || "Loading..."}</td>
+                    <td>{b.userId}</td>
+                    <td>{formatDate(b.bookingDate)}</td>
+                    <td>{formatDatePart(b.startDateTime)}</td>
+                    <td>{formatTimePart(b.startDateTime)}</td>
+                    <td>{formatDatePart(b.endDateTime)}</td>
+                    <td>{formatTimePart(b.endDateTime)}</td>
+                    <td>{b.purpose}</td>
+                  </tr>
+
+                  {/* ROW 2 */}
+                  <tr className="detail-row">
+                    <td colSpan="9">
+
+                      <div className="detail-box">
+
+                        {/* STATUS */}
+                        <div>
+                          <strong>Status:</strong>{" "}
+                          <span className={`status-badge ${getStatusClass(b.status)}`}>
+                            {b.status}
+                          </span>
+                        </div>
+
+                        {/* ✅ REASON (YOUR REQUIRED SNIPPET INSERTED HERE) */}
+                        <div>
+                          <strong>Reason:</strong>{" "}
+                          {b.status === "PENDING" ? (
+                            <input
+                              value={rejectReasons[b.id] || ""}
+                              onChange={(e) =>
+                                handleReasonChange(b.id, e.target.value)
+                              }
+                              placeholder="Reject reason"
+                            />
+                          ) : (
+                            b.adminReason || "-"
+                          )}
+                        </div>
+
+                        {/* ACTIONS */}
+                        <div>
+                          <strong>Actions:</strong>{" "}
+                          {b.status === "PENDING" ? (
+                            <div className="admin-actions">
+
+                              <button
+                                className="approve-btn"
+                                onClick={() => handleApprove(b.id)}
+                              >
+                                Approve
+                              </button>
+
+                              <button
+                                className="reject-btn"
+                                onClick={() => handleReject(b.id)}
+                              >
+                                Reject
+                              </button>
+
+                            </div>
+                          ) : (
+                            <span>Done</span>
+                          )}
+                        </div>
+
+                      </div>
+
+                    </td>
+                  </tr>
+
+                </React.Fragment>
+              ))}
             </tbody>
+
           </table>
-        </div>
+        )}
+
       </div>
     </div>
   );

@@ -5,9 +5,6 @@ import lombok.Data;
 
 @Data
 public class ReviewBookingRequest {
-
-    @NotBlank(message = "Decision is required")
-    private String decision;
-
-    private String adminReason;
-}
+        private String decision;
+        private String adminReason;
+    }

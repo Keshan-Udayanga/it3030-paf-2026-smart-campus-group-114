@@ -13,6 +13,7 @@ import smart_campus.back_end.booking.model.Booking;
 import smart_campus.back_end.booking.model.BookingStatus;
 import smart_campus.back_end.booking.repository.BookingRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
 
+    // ================= CREATE BOOKING =================
     public BookingResponse createBooking(CreateBookingRequest request) {
 
         checkForConflicts(
@@ -46,10 +48,10 @@ public class BookingService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        Booking savedBooking = bookingRepository.save(booking);
-        return BookingMapper.toResponse(savedBooking);
+        return BookingMapper.toResponse(bookingRepository.save(booking));
     }
 
+    // ================= GET ALL =================
     public List<BookingResponse> getAllBookings() {
         return bookingRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
@@ -57,6 +59,7 @@ public class BookingService {
                 .toList();
     }
 
+    // ================= GET MY BOOKINGS =================
     public List<BookingResponse> getMyBookings(String userId) {
         return bookingRepository.findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
@@ -64,28 +67,39 @@ public class BookingService {
                 .toList();
     }
 
+    // ================= GET BY ID =================
     public BookingResponse getBookingById(String id) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
 
         return BookingMapper.toResponse(booking);
     }
 
+    // ================= REVIEW BOOKING =================
     public BookingResponse reviewBooking(String id, ReviewBookingRequest request) {
+
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
 
         if (booking.getStatus() != BookingStatus.PENDING) {
             throw new BadRequestException("Only PENDING bookings can be reviewed");
         }
 
-        String decision = request.getDecision().trim().toUpperCase();
+        String decision = request.getDecision();
+
+        if (decision == null) {
+            throw new BadRequestException("Decision cannot be null");
+        }
+
+        decision = decision.trim().toUpperCase();
 
         if (!decision.equals("APPROVED") && !decision.equals("REJECTED")) {
             throw new BadRequestException("Decision must be APPROVED or REJECTED");
         }
 
+        // ================= APPROVE =================
         if (decision.equals("APPROVED")) {
+
             checkForConflicts(
                     booking.getResourceId(),
                     booking.getBookingDate(),
@@ -96,20 +110,32 @@ public class BookingService {
 
             booking.setStatus(BookingStatus.APPROVED);
             booking.setAdminReason(null);
-        } else {
+        }
+
+        // ================= REJECT =================
+        else {
+
             booking.setStatus(BookingStatus.REJECTED);
-            booking.setAdminReason(request.getAdminReason());
+
+            String reason = request.getAdminReason();
+
+            if (reason != null && !reason.trim().isEmpty()) {
+                booking.setAdminReason(reason.trim());
+            } else {
+                booking.setAdminReason("Rejected by admin");
+            }
         }
 
         booking.setUpdatedAt(LocalDateTime.now());
 
-        Booking updatedBooking = bookingRepository.save(booking);
-        return BookingMapper.toResponse(updatedBooking);
+        return BookingMapper.toResponse(bookingRepository.save(booking));
     }
 
+    // ================= CANCEL BOOKING =================
     public BookingResponse cancelBooking(String id) {
+
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
 
         if (booking.getStatus() != BookingStatus.APPROVED) {
             throw new BadRequestException("Only APPROVED bookings can be cancelled");
@@ -118,13 +144,14 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELLED);
         booking.setUpdatedAt(LocalDateTime.now());
 
-        Booking updatedBooking = bookingRepository.save(booking);
-        return BookingMapper.toResponse(updatedBooking);
+        return BookingMapper.toResponse(bookingRepository.save(booking));
     }
 
+    // ================= DELETE BOOKING =================
     public void deleteBooking(String id) {
+
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
 
         if (booking.getStatus() != BookingStatus.PENDING) {
             throw new BadRequestException("Only PENDING bookings can be deleted");
@@ -133,28 +160,26 @@ public class BookingService {
         bookingRepository.delete(booking);
     }
 
-
-
+    // ================= CONFLICT CHECK =================
     private void checkForConflicts(String resourceId,
-                                   java.time.LocalDate bookingDate,
-                                   LocalDateTime newStartDateTime,
-                                   LocalDateTime newEndDateTime,
-                                   String currentBookingId) {
+                                   LocalDate bookingDate,
+                                   LocalDateTime newStart,
+                                   LocalDateTime newEnd,
+                                   String currentId) {
 
-        List<Booking> sameDayBookings = bookingRepository.findByResourceIdAndBookingDate(resourceId, bookingDate);
+        List<Booking> sameDay = bookingRepository.findByResourceIdAndBookingDate(resourceId, bookingDate);
 
-        boolean hasConflict = sameDayBookings.stream()
-                .filter(existingBooking ->
-                        currentBookingId == null || !existingBooking.getId().equals(currentBookingId))
-                .filter(existingBooking ->
-                        existingBooking.getStatus() == BookingStatus.PENDING ||
-                                existingBooking.getStatus() == BookingStatus.APPROVED)
-                .anyMatch(existingBooking ->
-                        newStartDateTime.isBefore(existingBooking.getEndDateTime()) &&
-                                newEndDateTime.isAfter(existingBooking.getStartDateTime()));
+        boolean conflict = sameDay.stream()
+                .filter(b -> currentId == null || !b.getId().equals(currentId))
+                .filter(b -> b.getStatus() == BookingStatus.PENDING
+                        || b.getStatus() == BookingStatus.APPROVED)
+                .anyMatch(b ->
+                        newStart.isBefore(b.getEndDateTime()) &&
+                                newEnd.isAfter(b.getStartDateTime())
+                );
 
-        if (hasConflict) {
-            throw new ConflictException("This resource already has a booking in the selected time range");
+        if (conflict) {
+            throw new ConflictException("Time slot already booked");
         }
     }
 }
