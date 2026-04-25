@@ -1,31 +1,25 @@
-package smart_campus.back_end.tickets.entity;
+package smart_campus.back_end.tickets.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Document(collection = "comments")
-public class Comment {
-
-    @Id
+public class CommentDTO {
     private String id;
     private String ticketId;
     private String authorName;
-    private String authorEmail; // Used for ownership rules
+    private String authorEmail;
     private String content;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    public Comment() {
+    public CommentDTO() {
     }
 
-    public Comment(String ticketId, String authorName, String authorEmail, String content) {
+    public CommentDTO(String id, String ticketId, String authorName, String authorEmail, String content, LocalDateTime createdAt) {
+        this.id = id;
         this.ticketId = ticketId;
         this.authorName = authorName;
         this.authorEmail = authorEmail;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -74,13 +68,5 @@ public class Comment {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./TicketList.css";
+import CommentSection from "./CommentSection";
 
 function TicketList() {
     const [tickets, setTickets] = useState([]);
@@ -172,30 +173,35 @@ function TicketList() {
             </table>
 
             {selectedTicket && (
-                <div className="popup">
-                    <h3>Assign Technician</h3>
+                <div className="popup-overlay">
+                    <div className="popup">
+                        <h3>Assign Technician</h3>
 
-                    <input
-                        placeholder="Technician Name"
-                        value={technician}
-                        onChange={(e) => setTechnician(e.target.value)}
-                    />
+                        <input
+                            placeholder="Technician Name"
+                            value={technician}
+                            onChange={(e) => setTechnician(e.target.value)}
+                        />
 
-                    <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                        <option value="">Select Status</option>
-                        <option value="OPEN">OPEN</option>
-                        <option value="IN_PROGRESS">IN_PROGRESS</option>
-                        <option value="CLOSED">CLOSED</option>
-                    </select>
+                        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                            <option value="">Select Status</option>
+                            <option value="OPEN">OPEN</option>
+                            <option value="IN_PROGRESS">IN_PROGRESS</option>
+                            <option value="CLOSED">CLOSED</option>
+                        </select>
 
-                    <textarea
-                        placeholder="Resolution Notes"
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                    />
+                        <textarea
+                            placeholder="Resolution Notes"
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                        />
 
-                    <button onClick={handleUpdate}>Update</button>
-                    <button className="cancel-btn" onClick={() => setSelectedTicket(null)}>Cancel</button>
+                        <button onClick={handleUpdate}>Update</button>
+                        
+                        <CommentSection ticketId={selectedTicket.id} />
+
+                        <button className="cancel-btn" onClick={() => setSelectedTicket(null)}>Cancel</button>
+                    </div>
                 </div>
             )}
         </div>

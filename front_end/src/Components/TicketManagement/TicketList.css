@@ -1,17 +1,29 @@
 
-.popup {
+.popup-overlay {
   position: fixed;
-  top: 30%;
-  left: 40%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
   background: white;
-  padding: 20px;
+  padding: 30px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 300px;
-  z-index: 1000;
+  width: min(90%, 500px);
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1001;
 }
 
 .popup input, .popup select, .popup textarea {
