@@ -184,3 +184,41 @@ button:active {
     font-size: 24px;
   }
 }
+
+/* ===== FILE UPLOAD ===== */
+.file-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #24523c;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.file-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed rgba(36, 82, 60, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #163425;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+.file-input:hover {
+  border-color: #59c27a;
+}
+
+.file-preview {
+  list-style: none;
+  padding: 8px 0 0 0;
+  margin: 0;
+  font-size: 13px;
+  color: #1a5c38;
+}
+
+.file-preview li {
+  margin-bottom: 4px;
+}

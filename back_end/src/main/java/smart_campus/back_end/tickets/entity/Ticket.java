@@ -3,6 +3,8 @@ package smart_campus.back_end.tickets.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "tickets")
 public class Ticket {
@@ -37,6 +39,9 @@ public class Ticket {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // Max 3 attachment references
+    private List<String> attachmentIds = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -172,5 +177,13 @@ public class Ticket {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<String> getAttachmentIds() {
+        return attachmentIds;
+    }
+
+    public void setAttachmentIds(List<String> attachmentIds) {
+        this.attachmentIds = attachmentIds;
     }
 }

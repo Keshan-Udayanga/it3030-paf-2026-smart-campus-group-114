@@ -132,6 +132,7 @@ function TicketList() {
                         <th>Priority</th>
                         <th>Status</th>
                         <th>Contact</th>
+                        <th>Attachments</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -145,6 +146,22 @@ function TicketList() {
                             <td>{t.priority}</td>
                             <td>{t.status}</td>
                             <td>{t.preferredContactName}</td>
+                            <td className="attachment-links">
+                                {t.attachmentIds && t.attachmentIds.length > 0
+                                    ? t.attachmentIds.map((aid, i) => (
+                                        <a
+                                            key={aid}
+                                            href={`http://localhost:8080/api/v1/tickets/attachments/${aid}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="attachment-link"
+                                        >
+                                            📎 File {i + 1}
+                                        </a>
+                                    ))
+                                    : <span className="no-attachment">—</span>
+                                }
+                            </td>
                             <td className="action-buttons">
                                 <button onClick={() => handleEdit(t)} className="assign-btn">Assign</button>
                                 <button onClick={() => handleDelete(t.id)} className="delete-btn">Delete</button>

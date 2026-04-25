@@ -139,3 +139,25 @@
 .delete-btn:hover {
   background-color: #c82333;
 }
+
+/* Attachment Links */
+.attachment-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.attachment-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.attachment-link:hover {
+  text-decoration: underline;
+}
+
+.no-attachment {
+  color: #aaa;
+  font-size: 13px;
+}

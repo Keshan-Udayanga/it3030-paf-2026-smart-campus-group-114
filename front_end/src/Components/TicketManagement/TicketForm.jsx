@@ -16,6 +16,7 @@ function TicketForm() {
     preferredContactPhone: ""
   });
 
+  const [files, setFiles] = useState([]);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("");
 
@@ -26,26 +27,47 @@ function TicketForm() {
     });
   };
 
+  const handleFileChange = (e) => {
+    const selected = Array.from(e.target.files);
+    if (selected.length > 3) {
+      setMessage("Maximum 3 files allowed!");
+      setType("error");
+      e.target.value = null;
+      return;
+    }
+    setFiles(selected);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      // Step 1: Create the ticket
       const response = await axios.post(
         "http://localhost:8080/api/v1/tickets",
         formData
       );
 
-      console.log(response.data);
+      const ticketId = response.data.id;
 
-      // ✅ POPUP SUCCESS
+      // Step 2: Upload attachments if any
+      if (files.length > 0) {
+        const formPayload = new FormData();
+        files.forEach(file => formPayload.append("files", file));
+
+        await axios.post(
+          `http://localhost:8080/api/v1/tickets/${ticketId}/attachments`,
+          formPayload,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      }
+
       setMessage("Ticket Created Successfully!");
       setType("success");
 
-      setTimeout(() => {
-        setMessage("");
-      }, 3000);
+      setTimeout(() => setMessage(""), 3000);
 
-      // reset form
+      // Reset form
       setFormData({
         title: "",
         description: "",
@@ -57,11 +79,10 @@ function TicketForm() {
         preferredContactEmail: "",
         preferredContactPhone: ""
       });
+      setFiles([]);
 
     } catch (error) {
       console.error(error);
-
-      // ❌ POPUP ERROR
       setMessage("Error creating ticket!");
       setType("error");
     }
@@ -173,6 +194,22 @@ function TicketForm() {
             value={formData.preferredContactPhone}
             onChange={handleChange}
           />
+        </div>
+
+        <div className="form-group">
+          <label className="file-label">Attachments (max 3 files)</label>
+          <input
+            type="file"
+            multiple
+            accept="image/*,application/pdf,.doc,.docx,.txt"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+          {files.length > 0 && (
+            <ul className="file-preview">
+              {files.map((f, i) => <li key={i}>📎 {f.name}</li>)}
+            </ul>
+          )}
         </div>
 
         <button type="submit">Submit Ticket</button>
