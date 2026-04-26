@@ -118,4 +118,36 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build(); // 204
     }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableUser(@PathVariable String id) {
+        User user = userService.findById(id);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        user.setEnabled(false);
+        userService.saveUser(user);
+
+        return ResponseEntity.noContent().build(); // 204
+    }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableUser(@PathVariable String id) {
+        User user = userService.findById(id);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        user.setEnabled(true);
+        userService.saveUser(user);
+
+        return ResponseEntity.noContent().build(); // 204
+    }
 }
