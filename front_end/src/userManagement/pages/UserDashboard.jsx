@@ -34,7 +34,14 @@ function UserDashboard() {
         navigate("/");
       }
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.response?.status === 403) {
+        alert("Your account has been disabled");
+
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
+      
       localStorage.removeItem("token");
       navigate("/");
     });

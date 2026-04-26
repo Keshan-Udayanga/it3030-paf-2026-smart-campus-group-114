@@ -16,7 +16,9 @@ function UsersPage() {
     axios.get("http://localhost:8080/api/v1/users", {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => setUsers(res.data))
+    .then(res => {
+      setUsers(res.data)
+    console.log(res.data);})
     .catch(err => console.error(err));
   }, []);
   
@@ -42,6 +44,35 @@ function UsersPage() {
         alert("Error updating role");
       }
     });
+  };
+
+  const toggleUserStatus = async (id, enabled) => {
+    try {
+      const endpoint = enabled ? "disable" : "enable";
+
+      await axios.put(
+        `http://localhost:8080/api/v1/users/${id}/${endpoint}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setUsers(prev =>
+        prev.map(u =>
+          u.id === id ? { ...u, enabled: !enabled } : u
+        )
+      );
+
+    } catch (err) {
+      const status = err.response?.status;
+
+      if (status === 403) {
+        alert("Action not allowed");
+      } else if (status === 404) {
+        alert("User not found");
+      } else {
+        alert("Failed to update user status");
+      }
+    }
   };
 
   const handleDelete = async (userId) => {
@@ -86,6 +117,7 @@ function UsersPage() {
             <th>Name</th>
             <th>Email</th>
             <th>Roles</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -101,6 +133,11 @@ function UsersPage() {
                 ))}
               </td>
               <td>
+                <span className={`status-badge ${user.enabled ? "active" : "disabled"}`}>
+                  {user.enabled ? "Active" : "Disabled"}
+                </span>
+              </td>
+              <td>
                 <div className="action-group">
 
                   <select
@@ -114,6 +151,12 @@ function UsersPage() {
                   </select>
                   <button className="btn-delete" disabled={user.roles.includes("ROLE_ADMIN")} onClick={() => handleDelete(user.id)}>
                     Delete
+                  </button>
+                  <button
+                    className={`btn-status ${user.enabled ? "disable" : "enable"}`}
+                    onClick={() => toggleUserStatus(user.id, user.enabled)}
+                  >
+                    {user.enabled ? "Disable" : "Enable"}
                   </button>
                 </div>
               </td>

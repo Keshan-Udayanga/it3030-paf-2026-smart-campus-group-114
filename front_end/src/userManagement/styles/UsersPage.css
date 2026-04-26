@@ -209,6 +209,63 @@
   box-shadow: none;
 }
 
+/* STATUS BUTTON */
+.btn-status {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* DISABLE (red tone) */
+.btn-status.disable {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-status.disable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5);
+}
+
+/* ENABLE (green tone) */
+.btn-status.enable {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-status.enable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+}
+
+/* STATUS BADGE */
+.status-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ACTIVE */
+.status-badge.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+/* DISABLED */
+.status-badge.disabled {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .users-table th,
