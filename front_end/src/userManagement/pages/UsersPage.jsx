@@ -29,11 +29,19 @@ function UsersPage() {
     .then(res => {
       setUsers(prev =>
         prev.map(u =>
-          u.id === id ? { ...u, roles: [newRole] } : u
+          u.id === id ? res.data : u
         )
       );
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      if (err.response?.status === 400) {
+        alert("Invalid role update");
+      } else if (err.response?.status === 404) {
+        alert("User not found");
+      } else {
+        alert("Error updating role");
+      }
+    });
   };
 
   const handleDelete = async (userId) => {
@@ -50,9 +58,16 @@ function UsersPage() {
 
       // Remove user from UI
       setUsers(prev => prev.filter(user => user.id !== userId));
+      alert("User deleted successfully"); 
 
     } catch (error) {
-      console.error("Error deleting user", error);
+      if (error.response?.status === 403) {
+        alert("Cannot delete admin user");
+      } else if (error.response?.status === 404) {
+        alert("User not found");
+      } else {
+        alert("Something went wrong");
+      }
     }
   };
 
