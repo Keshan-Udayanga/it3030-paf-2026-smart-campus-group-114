@@ -1,7 +1,9 @@
 package smart_campus.back_end.notification.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import smart_campus.back_end.notification.model.Notification;
 import smart_campus.back_end.notification.repository.NotificationRepository;
 
@@ -35,7 +37,8 @@ public class NotificationService {
 
     public void markAsRead(String id) {
         Notification notification = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notification not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Notification not found"));
 
         notification.setRead(true);
         repository.save(notification);

@@ -1,5 +1,6 @@
 package smart_campus.back_end.notification.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import smart_campus.back_end.auth.service.CustomUserDetails;
@@ -32,8 +33,9 @@ public class NotificationController {
 
     //Mark as Read
     @PutMapping("/{id}/read")
-    public void markAsRead(@PathVariable String id){
+    public ResponseEntity<Void> markAsRead(@PathVariable String id) {
         service.markAsRead(id);
+        return ResponseEntity.noContent().build(); // 204
     }
 
     //Get unread count

@@ -1,8 +1,10 @@
 package smart_campus.back_end.auth.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import smart_campus.back_end.auth.dto.UpdateUserRolesRequest;
 import smart_campus.back_end.auth.dto.UserResponse;
 import smart_campus.back_end.auth.mapper.UserMapper;
@@ -61,6 +63,18 @@ public class UserController {
     public ResponseEntity<UserResponse> updateRoles(@PathVariable String id, @RequestBody UpdateUserRolesRequest request){
         User user = userService.findById(id);
 
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        if (request.roles() == null || request.roles().isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Roles cannot be empty"
+            );
+        }
+
         user.setRoles(request.roles());
 
         userService.saveUser(user);
@@ -88,11 +102,20 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
         User user = userService.findById(id);
 
-        // Prevent deleting admins (important safeguard)
-        if (user.getRoles().equals("ROLE_ADMIN")) {
-            throw new RuntimeException("Cannot delete admin users");
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
         }
+
+        // Prevent deleting admins (important safeguard)
+        if (user.getRoles().contains("ROLE_ADMIN")) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Cannot delete admin users"
+            );
+        }
+
         userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
+        return ResponseEntity.noContent().build(); // 204
     }
 }
