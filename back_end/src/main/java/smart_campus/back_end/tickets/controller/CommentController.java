@@ -1,5 +1,6 @@
 package smart_campus.back_end.tickets.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommentDTO> addComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<CommentDTO> addComment(@Valid @RequestBody CommentDTO commentDTO) {
         return new ResponseEntity<>(commentService.addComment(commentDTO), HttpStatus.CREATED);
     }
 

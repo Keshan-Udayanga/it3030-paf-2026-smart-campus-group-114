@@ -39,6 +39,7 @@ public class Ticket {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime resolvedAt;
 
     // Max 3 attachment references
     private List<String> attachmentIds = new ArrayList<>();
@@ -177,6 +178,14 @@ public class Ticket {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getResolvedAt() {
+        return resolvedAt;
+    }
+
+    public void setResolvedAt(LocalDateTime resolvedAt) {
+        this.resolvedAt = resolvedAt;
     }
 
     public List<String> getAttachmentIds() {

@@ -60,6 +60,14 @@ public class TicketServiceImpl implements TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
         ticket.setAssignedTechnician(updatedTicketDTO.getAssignedTechnician());
+        
+        // SLA: Set resolvedAt if status changes to RESOLVED
+        if ("RESOLVED".equals(updatedTicketDTO.getStatus()) && !"RESOLVED".equals(ticket.getStatus())) {
+            ticket.setResolvedAt(LocalDateTime.now());
+        } else if (!"RESOLVED".equals(updatedTicketDTO.getStatus())) {
+            ticket.setResolvedAt(null); // Clear if moved back from resolved
+        }
+
         ticket.setStatus(updatedTicketDTO.getStatus());
         ticket.setResolutionNotes(updatedTicketDTO.getResolutionNotes());
         ticket.setRejectionReason(updatedTicketDTO.getRejectionReason());
@@ -90,6 +98,7 @@ public class TicketServiceImpl implements TicketService {
                 ticket.getAssignedTechnician(),
                 ticket.getResolutionNotes(),
                 ticket.getRejectionReason(),
+                ticket.getResolvedAt(),
                 ticket.getAttachmentIds(),
                 ticket.getCreatedAt(),
                 ticket.getUpdatedAt()

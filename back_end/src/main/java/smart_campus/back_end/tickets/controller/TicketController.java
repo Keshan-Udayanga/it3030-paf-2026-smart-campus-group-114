@@ -1,5 +1,6 @@
 package smart_campus.back_end.tickets.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketResponseDTO> createTicket(@RequestBody TicketRequestDTO ticketRequestDTO) {
+    public ResponseEntity<TicketResponseDTO> createTicket(@Valid @RequestBody TicketRequestDTO ticketRequestDTO) {
         return ResponseEntity.ok(ticketService.createTicket(ticketRequestDTO));
     }
 
@@ -35,7 +36,7 @@ public class TicketController {
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponseDTO> updateTicket(
             @PathVariable String id,
-            @RequestBody TicketResponseDTO updatedTicketDTO) {
+            @Valid @RequestBody TicketResponseDTO updatedTicketDTO) {
         return ResponseEntity.ok(ticketService.updateTicket(id, updatedTicketDTO));
     }
 

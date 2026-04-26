@@ -25,6 +25,7 @@ public class TicketResponseDTO {
     private String assignedTechnician;
     private String resolutionNotes;
     private String rejectionReason;
+    private LocalDateTime resolvedAt;
     private List<String> attachmentIds;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
