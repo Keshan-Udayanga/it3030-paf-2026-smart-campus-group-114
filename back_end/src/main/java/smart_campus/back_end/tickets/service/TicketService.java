@@ -1,18 +1,18 @@
 package smart_campus.back_end.tickets.service;
 
 import smart_campus.back_end.tickets.dto.TicketRequestDTO;
-import smart_campus.back_end.tickets.entity.Ticket;
+import smart_campus.back_end.tickets.dto.TicketResponseDTO;
 import java.util.List;
 
 public interface TicketService {
 
-    Ticket createTicket(TicketRequestDTO ticketRequestDTO);
+    TicketResponseDTO createTicket(TicketRequestDTO ticketRequestDTO);
 
-    List<Ticket> getAllTickets();
+    List<TicketResponseDTO> getAllTickets();
 
-    Ticket getTicketById(String id);
+    TicketResponseDTO getTicketById(String id);
 
-    Ticket updateTicket(String id, Ticket updatedTicket);
+    TicketResponseDTO updateTicket(String id, TicketResponseDTO updatedTicketDTO);
 
     void deleteTicket(String id);
 }

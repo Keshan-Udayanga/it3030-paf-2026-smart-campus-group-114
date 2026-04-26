@@ -1,14 +1,13 @@
 package smart_campus.back_end.tickets.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smart_campus.back_end.tickets.dto.TicketRequestDTO;
-import smart_campus.back_end.tickets.entity.Ticket;
+import smart_campus.back_end.tickets.dto.TicketResponseDTO;
 import smart_campus.back_end.tickets.service.TicketService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tickets")
@@ -19,31 +18,30 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketRequestDTO ticketRequestDTO) {
-        Ticket createdTicket = ticketService.createTicket(ticketRequestDTO);
-        return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
+    public ResponseEntity<TicketResponseDTO> createTicket(@RequestBody TicketRequestDTO ticketRequestDTO) {
+        return ResponseEntity.ok(ticketService.createTicket(ticketRequestDTO));
     }
 
-    // READ ALL
     @GetMapping
-    public ResponseEntity<List<Ticket>> getAllTickets() {
+    public ResponseEntity<List<TicketResponseDTO>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable String id) {
+    public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable String id) {
         return ResponseEntity.ok(ticketService.getTicketById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ticket> updateTicket(
+    public ResponseEntity<TicketResponseDTO> updateTicket(
             @PathVariable String id,
-            @RequestBody Ticket ticket) {
-        return ResponseEntity.ok(ticketService.updateTicket(id, ticket));
+            @RequestBody TicketResponseDTO updatedTicketDTO) {
+        return ResponseEntity.ok(ticketService.updateTicket(id, updatedTicketDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTicket(@PathVariable String id) {
+    public ResponseEntity<String> deleteTicket(@PathVariable String id) {
         ticketService.deleteTicket(id);
-        return ResponseEntity.ok().body("Deleted");
+        return ResponseEntity.ok("Ticket deleted successfully");
     }
 }
