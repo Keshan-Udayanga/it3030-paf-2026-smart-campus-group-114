@@ -16,9 +16,12 @@ import smart_campus.back_end.booking.model.Booking;
 import smart_campus.back_end.booking.model.BookingStatus;
 import smart_campus.back_end.booking.repository.BookingRepository;
 import smart_campus.back_end.notification.service.NotificationService;
+import smart_campus.back_end.resources.model.Resource;
+import smart_campus.back_end.resources.repository.ResourceRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,6 +30,9 @@ public class BookingService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -155,12 +161,23 @@ public class BookingService {
 
         Booking updated = bookingRepository.save(booking);
 
+        String resourceName = resourceRepository.findById(updated.getResourceId())
+                .map(Resource::getName)
+                .orElse("Resource");
+
         String message;
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        String formattedDate = updated.getStartDateTime().format(formatter);
+
         if (updated.getStatus() == BookingStatus.APPROVED) {
-            message = "Your booking has been approved";
+            message = "Your booking for " + resourceName +
+                    " on " + formattedDate + " has been approved";
         } else {
-            message = "Your booking was rejected. Reason: " + updated.getAdminReason();
+            message = "Your booking for " + resourceName +
+                    " on " + formattedDate +
+                    " was rejected. Reason: " + updated.getAdminReason();
         }
 
         notificationService.createNotification(
