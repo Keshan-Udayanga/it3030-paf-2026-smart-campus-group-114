@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import smart_campus.back_end.auth.model.User;
 import smart_campus.back_end.auth.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class UserService {

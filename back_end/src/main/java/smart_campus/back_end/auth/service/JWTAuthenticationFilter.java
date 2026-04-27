@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import smart_campus.back_end.auth.model.User;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
@@ -40,16 +41,16 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         String email = jwtService.extractEmail(token);
 
-        User user = userService.findByEmail(email);
+        Optional<User> user = userService.findByEmail(email);
 
         //Kill access for already logged in user
-        if (user == null || !user.isEnabled()) {
+        if (user.isEmpty() || !user.get().isEnabled()) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return; // stop filter chain
         }
 
         if(SecurityContextHolder.getContext().getAuthentication() == null){
-            CustomUserDetails customUserDetails = new CustomUserDetails(user);
+            CustomUserDetails customUserDetails = new CustomUserDetails(user.orElse(null));
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
