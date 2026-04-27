@@ -26,14 +26,22 @@ function UserDashboard() {
     })
     .then(res => {
       const roles = res.data.roles;
+      localStorage.setItem("userName", res.data.name);
       //ROLE-BASED REDIRECT
       if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_RESOURCE_MANAGER")) {
         navigate("/admin/dashboard");
       } else {
-        navigate("/user-dashboard");
+        navigate("/");
       }
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.response?.status === 403) {
+        alert("Your account has been disabled");
+
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
+      
       localStorage.removeItem("token");
       navigate("/");
     });

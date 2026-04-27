@@ -42,6 +42,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         User user = userService.findByEmail(email);
 
+        //Kill access for already logged in user
+        if (user == null || !user.isEnabled()) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return; // stop filter chain
+        }
+
         if(SecurityContextHolder.getContext().getAuthentication() == null){
             CustomUserDetails customUserDetails = new CustomUserDetails(user);
 

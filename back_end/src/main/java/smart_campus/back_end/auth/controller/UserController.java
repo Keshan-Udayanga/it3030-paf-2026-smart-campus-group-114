@@ -1,8 +1,10 @@
 package smart_campus.back_end.auth.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import smart_campus.back_end.auth.dto.UpdateUserRolesRequest;
 import smart_campus.back_end.auth.dto.UserResponse;
 import smart_campus.back_end.auth.mapper.UserMapper;
@@ -30,14 +32,12 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<User> userList = userService.findAll();
         return ResponseEntity.ok(userMapper.toUserResponse(userList));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserResponse> getUser(@PathVariable String id){
         User user = userService.findById(id);
         UserResponse response = userMapper.toUserResponse(user);
@@ -60,9 +60,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}/roles")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserResponse> updateRoles(@PathVariable String id, @RequestBody UpdateUserRolesRequest request){
         User user = userService.findById(id);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        if (request.roles() == null || request.roles().isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Roles cannot be empty"
+            );
+        }
 
         user.setRoles(request.roles());
 
@@ -85,5 +96,58 @@ public class UserController {
     @GetMapping("/count")
     public ResponseEntity<Long> getUserCount(){
         return ResponseEntity.ok(userService.countUsers());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        User user = userService.findById(id);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        // Prevent deleting admins (important safeguard)
+        if (user.getRoles().contains("ROLE_ADMIN")) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Cannot delete admin users"
+            );
+        }
+
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build(); // 204
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableUser(@PathVariable String id) {
+        User user = userService.findById(id);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        user.setEnabled(false);
+        userService.saveUser(user);
+
+        return ResponseEntity.noContent().build(); // 204
+    }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableUser(@PathVariable String id) {
+        User user = userService.findById(id);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+
+        user.setEnabled(true);
+        userService.saveUser(user);
+
+        return ResponseEntity.noContent().build(); // 204
     }
 }

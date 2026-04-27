@@ -98,7 +98,23 @@ const NavBar = () => {
 
       setUnreadCount(prev => Math.max(prev - 1, 0));
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+    const status = err.response?.status;
+
+    if (status === 404) {
+      alert("Notification not found");
+    } else if (status === 401) {
+      alert("Session expired. Please login again");
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    } else if (status === 403) {
+      alert("You are not allowed to do this");
+    } else {
+      alert("Failed to mark notification as read");
+    }
+
+    console.error(err);
+  });
   };
 
   return (

@@ -14,7 +14,6 @@ function AdminDashboard() {
     })
     .then(res => {
       setUser(res.data);
-      localStorage.setItem("userName", res.data.name);
       window.dispatchEvent(new Event("authChanged"));
     })
     .catch(() => {
