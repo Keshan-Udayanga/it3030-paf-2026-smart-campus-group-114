@@ -1,7 +1,10 @@
 package smart_campus.back_end.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import smart_campus.back_end.auth.model.User;
+import smart_campus.back_end.auth.repository.UserRepository;
 import smart_campus.back_end.booking.dto.BookingResponse;
 import smart_campus.back_end.booking.dto.CreateBookingRequest;
 import smart_campus.back_end.booking.dto.ReviewBookingRequest;
@@ -12,6 +15,7 @@ import smart_campus.back_end.booking.mapper.BookingMapper;
 import smart_campus.back_end.booking.model.Booking;
 import smart_campus.back_end.booking.model.BookingStatus;
 import smart_campus.back_end.booking.repository.BookingRepository;
+import smart_campus.back_end.notification.service.NotificationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,10 +25,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingService {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
     private final BookingRepository bookingRepository;
 
     // ================= CREATE BOOKING =================
-    public BookingResponse createBooking(CreateBookingRequest request) {
+    public BookingResponse createBooking(CreateBookingRequest request, String userID) {
 
         checkForConflicts(
                 request.getResourceId(),
@@ -36,7 +46,7 @@ public class BookingService {
 
         Booking booking = Booking.builder()
                 .resourceId(request.getResourceId())
-                .userId(request.getUserId())
+                .userId(userID)
                 .bookingDate(request.getBookingDate())
                 .startDateTime(request.getStartDateTime())
                 .endDateTime(request.getEndDateTime())
@@ -48,7 +58,22 @@ public class BookingService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        return BookingMapper.toResponse(bookingRepository.save(booking));
+        Booking saved = bookingRepository.save(booking);
+
+        List<User> managers = userRepository.findByRolesContaining("ROLE_RESOURCE_MANAGER");
+        List<User> admins = userRepository.findByRolesContaining("ROLE_ADMIN");
+
+        String message = "New booking request for resource " + saved.getResourceId();
+
+        managers.forEach(u ->
+                notificationService.createNotification(u.getId(), message, "BOOKING")
+        );
+
+        admins.forEach(u ->
+                notificationService.createNotification(u.getId(), message, "BOOKING")
+        );
+
+        return BookingMapper.toResponse(saved);
     }
 
     // ================= GET ALL =================
