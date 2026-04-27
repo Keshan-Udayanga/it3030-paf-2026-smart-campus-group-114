@@ -36,7 +36,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         http
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .sessionManagement(session ->
@@ -47,30 +47,29 @@ public class SecurityConfig {
                                 "/oauth2/**",
                                 "/login/oauth2/**"
                         ).permitAll()
+
                         .requestMatchers("/api/v1/notifications/**").hasRole("USER")
                         .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated() // all other endpoints require auth
 
                         // PUBLIC GET RESOURCES
                         .requestMatchers("/api/resources").permitAll()
 
+                        //  ANY logged-in user can CREATE booking
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/bookings")
+                        .hasAnyRole("USER")
+
+                        //  ANY logged-in user can view THEIR bookings
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/bookings/my")
+                        .authenticated()
+
                         // BOOKING ACCESS (IMPORTANT FIX)
                         .requestMatchers("/api/bookings/**")
-                        .hasAnyRole("ADMIN", "RESOURCE_MANAGER")
+                        .hasAnyRole("RESOURCE_MANAGER")
 
                         // OTHER MODULES
                         .requestMatchers("/api/resources/**")
-                        .hasAnyRole("ADMIN", "RESOURCE_MANAGER")
-
-                        .requestMatchers("/api/v1/notifications/**")
-                        .hasAnyRole("ADMIN", "USER", "RESOURCE_MANAGER")
-
-                        .requestMatchers("/api/v1/users/**")
-                        .hasRole("ADMIN")
-
-                        .requestMatchers("/admin/**")
-                        .hasRole("ADMIN")
+                        .hasAnyRole("RESOURCE_MANAGER")
 
                         .anyRequest().authenticated()
                 )
@@ -101,7 +100,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000")); // React app
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*")); // allow Authorization header
         configuration.setAllowCredentials(true); // if cookies are used
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
