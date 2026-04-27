@@ -72,41 +72,53 @@ function NotificationsPage() {
       <div className="preferences-panel">
         <h3>Notification Settings</h3>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={preferences.bookingEnabled}
-            onChange={() => handleToggle("bookingEnabled")}
-          />
-          Booking
-        </label>
+        <div className="preference-item">
+          <span className="preference-label">Booking</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={preferences.bookingEnabled}
+              onChange={() => handleToggle("bookingEnabled")}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={preferences.ticketEnabled}
-            onChange={() => handleToggle("ticketEnabled")}
-          />
-          Ticket Updates
-        </label>
+        <div className="preference-item">
+          <span className="preference-label">Ticket Updates</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={preferences.ticketEnabled}
+              onChange={() => handleToggle("ticketEnabled")}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={preferences.commentEnabled}
-            onChange={() => handleToggle("commentEnabled")}
-          />
-          Comments
-        </label>
+        <div className="preference-item">
+          <span className="preference-label">Comments</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={preferences.commentEnabled}
+              onChange={() => handleToggle("commentEnabled")}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={preferences.roleChangedEnabled}
-            onChange={() => handleToggle("roleChangedEnabled")}
-          />
-          Role Changes
-        </label>
+        <div className="preference-item">
+          <span className="preference-label">Role Changes</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={preferences.roleChangedEnabled}
+              onChange={() => handleToggle("roleChangedEnabled")}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
       </div>
 
       <div className="notification-filters">
