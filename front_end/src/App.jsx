@@ -9,7 +9,6 @@ import Resources from './Components/ResourceManagement/Resources';
 import Services from "./Components/Services/Services";
 import Contact from "./Components/Contact/Contact";
 
-
 import LoginPage from "./userManagement/pages/LoginPage";
 import AdminDashboard from "./userManagement/pages/AdminDashboard";
 import UserDashboard from "./userManagement/pages/UserDashboard";
@@ -66,7 +65,7 @@ function App() {
 
             <Route path="booking-management" element={< AdminBookings />} />
 
-            <Route path="/tickets/list" element={<TicketList />} />
+            <Route path="tickets" element={<TicketList />} />
 
           </Route>
         </Routes>

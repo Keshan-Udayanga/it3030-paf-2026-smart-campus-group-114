@@ -50,6 +50,9 @@ function AdminLayout() {
           <li className={location.pathname === "/booking-management" ? "active" : ""}onClick={() => navigate("/admin/booking-management")}>
             Booking Management
           </li>
+          <li className={location.pathname === "/tickets" ? "active" : ""}onClick={() => navigate("/admin/tickets")}>
+            Ticket Management
+          </li>
         </ul>
       </div>
 
