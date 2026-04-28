@@ -20,7 +20,10 @@ function TicketList() {
     }, []);
 
     const fetchTickets = () => {
-        axios.get("http://localhost:8080/api/v1/tickets")
+        const token = localStorage.getItem("token");
+        axios.get("http://localhost:8080/api/v1/tickets", {
+                headers: { Authorization: `Bearer ${token}` }
+                })
             .then((res) => {
                 setTickets(res.data);
             })
@@ -39,6 +42,7 @@ function TicketList() {
 
     const handleUpdate = async () => {
         try {
+            const token = localStorage.getItem("token");
             await axios.put(
                 `http://localhost:8080/api/v1/tickets/${selectedTicket.id}`,
                 {
@@ -46,6 +50,8 @@ function TicketList() {
                     status: status,
                     resolutionNotes: notes,
                     rejectionReason: rejectionReason
+                }, {
+                headers: { Authorization: `Bearer ${token}` }
                 }
             );
 
@@ -62,7 +68,10 @@ function TicketList() {
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this ticket?")) {
             try {
-                await axios.delete(`http://localhost:8080/api/v1/tickets/${id}`);
+                const token = localStorage.getItem("token");
+                await axios.delete(`http://localhost:8080/api/v1/tickets/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+                });
                 alert("Ticket Deleted!");
                 fetchTickets();
             } catch (error) {

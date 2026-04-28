@@ -51,7 +51,6 @@ function App() {
           <Route path="/tickets" element={<MyTickets />} />
           <Route path="/tickets/:id" element={<TicketDetails />} />
           <Route path="/tickets/create" element={<TicketForm />} />
-          <Route path="/tickets/list" element={<TicketList />} />
 
           {/* 🛡️ Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
@@ -66,6 +65,8 @@ function App() {
             <Route path="update-resource/:id" element={<UpdateResource />} />
 
             <Route path="booking-management" element={< AdminBookings />} />
+
+            <Route path="/tickets/list" element={<TicketList />} />
 
           </Route>
         </Routes>

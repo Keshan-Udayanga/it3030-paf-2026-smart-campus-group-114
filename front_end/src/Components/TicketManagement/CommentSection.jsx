@@ -18,7 +18,10 @@ function CommentSection({ ticketId }) {
 
     const fetchComments = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/v1/comments/ticket/${ticketId}`);
+            const token = localStorage.getItem("token");
+            const res = await axios.get(`http://localhost:8080/api/v1/comments/ticket/${ticketId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+                });
             setComments(res.data);
         } catch (err) {
             console.error("Error fetching comments:", err);
@@ -32,12 +35,15 @@ function CommentSection({ ticketId }) {
         }
 
         try {
+            const token = localStorage.getItem("token");
             await axios.post("http://localhost:8080/api/v1/comments", {
                 ticketId,
                 authorName,
                 authorEmail,
                 content: newComment
-            });
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+                });
             setNewComment("");
             fetchComments();
         } catch (err) {
@@ -47,10 +53,13 @@ function CommentSection({ ticketId }) {
 
     const handleUpdateComment = async (id) => {
         try {
+            const token = localStorage.getItem("token");
             await axios.put(`http://localhost:8080/api/v1/comments/${id}`, {
                 email: authorEmail,
                 content: editContent
-            });
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+                });
             setEditingCommentId(null);
             fetchComments();
         } catch (err) {
@@ -62,7 +71,10 @@ function CommentSection({ ticketId }) {
         if (!window.confirm("Delete this comment?")) return;
 
         try {
-            await axios.delete(`http://localhost:8080/api/v1/comments/${id}?email=${authorEmail}`);
+            const token = localStorage.getItem("token");
+            await axios.delete(`http://localhost:8080/api/v1/comments/${id}?email=${authorEmail}`, {
+                headers: { Authorization: `Bearer ${token}` }
+                });
             fetchComments();
         } catch (err) {
             alert(err.response?.data || "Delete failed");
