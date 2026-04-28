@@ -1,0 +1,105 @@
+/* BACKGROUND */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.hr{
+    margin-bottom: 25px;
+}
+
+/* MAIN */
+.admin-main {
+  flex: 1;
+  padding: 30px;
+}
+
+/* TOPBAR */
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-topbar h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.welcome-text {
+  color: #38bdf8;
+}
+
+/* ACTION BAR */
+.action-bar {
+  margin-bottom: 20px;
+}
+
+.add-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  transform: scale(1.05);
+}
+
+/* CARDS GRID */
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* CARD BASE */
+.admin-card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+}
+
+/* CARD COLORS */
+.admin-card.total {
+  border-left: 5px solid #3b82f6;
+}
+
+.admin-card.active {
+  border-left: 5px solid #22c55e;
+}
+
+.admin-card.inactive {
+  border-left: 5px solid #ef4444;
+}
+
+/* TEXT */
+.admin-card h4 {
+  margin-bottom: 10px;
+  color: #cbd5e1;
+}
+
+.admin-card p {
+    color: white;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .admin-cards {
+    grid-template-columns: 1fr;
+  }
+}

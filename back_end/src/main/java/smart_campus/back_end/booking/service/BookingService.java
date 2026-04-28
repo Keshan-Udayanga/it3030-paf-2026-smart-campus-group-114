@@ -235,4 +235,5 @@ public class BookingService {
             throw new ConflictException("Time slot already booked");
         }
     }
+
 }
