@@ -17,6 +17,9 @@ const AddResource = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // ✅ NEW POPUP STATE
+  const [showPopup, setShowPopup] = useState(false);
+
   // ======================
   // VALIDATION
   // ======================
@@ -35,7 +38,7 @@ const AddResource = () => {
   };
 
   // ======================
-  // HANDLE CHANGE (REAL TIME)
+  // HANDLE CHANGE
   // ======================
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,9 +87,12 @@ const AddResource = () => {
 
       console.log("Saved:", response.data);
 
-      alert("Resource Added Successfully!");
+      // ❌ OLD ALERT
+      // alert("Resource Added Successfully!");
 
-      navigate("/admin/resource-management");
+      // ✅ NEW POPUP
+      setShowPopup(true);
+
     } catch (error) {
       console.log("Error:", error);
       alert("Failed to add resource. Please try again.");
@@ -197,6 +203,27 @@ const AddResource = () => {
 
         </form>
       </div>
+
+      {/* ✅ POPUP UI */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <h3>✅ Success</h3>
+            <p>Resource Added Successfully!</p>
+
+            <button
+              className="popup-btn"
+              onClick={() => {
+                setShowPopup(false);
+                navigate("/admin/resource-management");
+              }}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };
