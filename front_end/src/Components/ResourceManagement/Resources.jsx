@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Resources.css";
+import { useNavigate } from "react-router-dom";
+
 
 const Resources = () => {
   const [resources, setResources] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
 
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFrom, setTimeFrom] = useState("");
@@ -184,6 +188,7 @@ const Resources = () => {
                             <button
                               className="btn-book"
                               disabled={!available}
+                              onClick={() => navigate(`/booking/${res.id}`)}
                             >
                               Book
                             </button>

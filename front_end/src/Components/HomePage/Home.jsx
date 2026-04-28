@@ -21,8 +21,8 @@ const Home = () => {
               <Link to="/resources" className="btn btn-primary">
                 Browse Resources
               </Link>
-              <Link to="/tickets" className="btn btn-secondary">
-                Raise a Ticket
+              <Link to="/myBookings" className="btn btn-secondary">
+                View My Bookings
               </Link>
             </div>
           </div>

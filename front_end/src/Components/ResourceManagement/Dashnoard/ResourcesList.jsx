@@ -21,7 +21,7 @@ function ResourcesList() {
         setResources(data);
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [token]);
 
   // 🔥 DELETE
   const handleDelete = (id) => {

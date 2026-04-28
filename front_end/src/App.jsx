@@ -25,6 +25,7 @@ import UpdateResource from "./Components/ResourceManagement/Dashnoard/UpdateReso
 
 import BookingForm from "./Components/BookingManagement/BookingForm";
 import AdminBookings from "./Components/BookingManagement/AdminBookings";
+import MyBookings from "./Components/BookingManagement/MyBookings";
 
 
 import TicketForm from './Components/TicketManagement/TicketForm';
@@ -52,6 +53,7 @@ function App() {
           <Route path="/tickets/:id" element={<TicketDetails />} />
           <Route path="/tickets/create" element={<TicketForm />} />
           <Route path="/tickets/list" element={<TicketList />} />
+          <Route path="/myBookings" element={<MyBookings />} />
 
           {/* 🛡️ Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>

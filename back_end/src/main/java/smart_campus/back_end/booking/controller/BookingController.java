@@ -36,7 +36,10 @@ public class BookingController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<BookingResponse>> getMyBookings(@RequestParam String userId) {
+    public ResponseEntity<List<BookingResponse>> getMyBookings(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        String userId = userDetails.getUser().getId();
         return ResponseEntity.ok(bookingService.getMyBookings(userId));
     }
 

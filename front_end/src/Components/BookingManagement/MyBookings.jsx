@@ -7,71 +7,86 @@ function MyBookings() {
   const navigate = useNavigate();
 
   const [bookings, setBookings] = useState([]);
-  const [message, setMessage] = useState("");
+  const [resources, setResources] = useState([]);
   const [error, setError] = useState("");
+
+  const token = localStorage.getItem("token");
+
+  // ---------------- LOAD RESOURCES ----------------
+  const loadResources = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/resources", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = Array.isArray(res.data) ? res.data : [];
+
+      // 🔥 IMPORTANT: unwrap EntityModel
+      const clean = data.map((r) => r.content || r);
+
+      setResources(clean);
+    } catch (err) {
+      console.error("RESOURCE ERROR:", err);
+    }
+  };
 
   // ---------------- LOAD BOOKINGS ----------------
   const loadBookings = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/bookings/my?email=USER001"
+      const res = await axios.get(
+        "http://localhost:8080/api/bookings/my",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
-      console.log("BOOKINGS API RESPONSE:", response.data);
-
-      setBookings(response.data);
-
+      setBookings(Array.isArray(res.data) ? res.data : []);
+      setError("");
     } catch (err) {
-      console.error("LOAD ERROR:", err);
-      setError("Failed to load bookings.");
+      console.error(err);
+      setError("Failed to load bookings");
     }
   };
 
-  // Auto load
   useEffect(() => {
+    loadResources();
     loadBookings();
   }, []);
 
-  // ---------------- ACTIONS ----------------
-  const handleCancel = async (id) => {
-    try {
-      await axios.put(`http://localhost:8080/api/bookings/cancel/${id}`);
-      loadBookings();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/api/bookings/${id}`);
-      loadBookings();
-    } catch (err) {
-      console.error(err);
-    }
+  // ---------------- MAP RESOURCE NAME ----------------
+  const getResourceName = (id) => {
+    const found = resources.find((r) => r.id === id);
+    return found ? found.name : id; // fallback = ID
   };
 
   // ---------------- STATS ----------------
+  const getStatus = (status) => (status || "").toUpperCase();
+
   const stats = useMemo(() => {
     return {
       total: bookings.length,
-      pending: bookings.filter(b => b.status === "PENDING").length,
-      approved: bookings.filter(b => b.status === "APPROVED").length,
-      rejected: bookings.filter(b => b.status === "REJECTED").length
+      pending: bookings.filter(b => getStatus(b.status) === "PENDING").length,
+      approved: bookings.filter(b => getStatus(b.status) === "APPROVED").length,
+      rejected: bookings.filter(b => getStatus(b.status) === "REJECTED").length,
     };
   }, [bookings]);
 
-  // ---------------- FORMAT ----------------
+  // ---------------- FILL ----------------
+  const getFill = (value) => {
+    const total = stats.total || 1;
+    return (value / total) * 100;
+  };
+
   const formatDateTime = (dt) => {
     if (!dt) return "-";
     return new Date(dt).toLocaleString();
   };
 
-  // ---------------- UI ----------------
   return (
     <div className="my-bookings-page-v2">
       <div className="my-bookings-wrapper">
 
+        {/* HEADER */}
         <div className="my-bookings-top">
           <div>
             <h1>My Bookings</h1>
@@ -86,27 +101,45 @@ function MyBookings() {
           </button>
         </div>
 
-        {/* ERROR */}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
         {/* STATS */}
         <div className="stats-grid">
+
           <div className="stat-card">
-            <div className="circle total-circle">{stats.total}</div>
+            <div className="circle" style={{
+              background: `conic-gradient(#0f172a ${getFill(stats.total)}%, #e5e7eb 0)`
+            }}>
+              <span>{stats.total}</span>
+            </div>
             <p>Total</p>
           </div>
+
           <div className="stat-card">
-            <div className="circle pending-circle">{stats.pending}</div>
+            <div className="circle" style={{
+              background: `conic-gradient(#f59e0b ${getFill(stats.pending)}%, #e5e7eb 0)`
+            }}>
+              <span>{stats.pending}</span>
+            </div>
             <p>Pending</p>
           </div>
+
           <div className="stat-card">
-            <div className="circle approved-circle">{stats.approved}</div>
+            <div className="circle" style={{
+              background: `conic-gradient(#10b981 ${getFill(stats.approved)}%, #e5e7eb 0)`
+            }}>
+              <span>{stats.approved}</span>
+            </div>
             <p>Approved</p>
           </div>
+
           <div className="stat-card">
-            <div className="circle rejected-circle">{stats.rejected}</div>
+            <div className="circle" style={{
+              background: `conic-gradient(#ef4444 ${getFill(stats.rejected)}%, #e5e7eb 0)`
+            }}>
+              <span>{stats.rejected}</span>
+            </div>
             <p>Rejected</p>
           </div>
+
         </div>
 
         {/* TABLE */}
@@ -116,55 +149,44 @@ function MyBookings() {
               <tr>
                 <th>ID</th>
                 <th>RESOURCE</th>
-                <th>USER</th>
-                <th>BOOKING DATE</th>
+                <th>DATE</th>
                 <th>START</th>
                 <th>END</th>
                 <th>PURPOSE</th>
-                <th>ATTENDEES</th>
                 <th>STATUS</th>
-                <th>ACTIONS</th>
               </tr>
             </thead>
 
             <tbody>
               {bookings.length === 0 ? (
                 <tr>
-                  <td colSpan="10">No bookings found</td>
+                  <td colSpan="7" className="empty-row">
+                    No bookings found
+                  </td>
                 </tr>
               ) : (
                 bookings.map((b, i) => (
                   <tr key={b.id}>
                     <td>#{i + 1}</td>
-                    <td>{b.resourceId}</td>
-                    <td>{b.userId}</td>
+
+                    {/* 🔥 FIXED HERE */}
+                    <td>{getResourceName(b.resourceId)}</td>
+
                     <td>{formatDateTime(b.bookingDate)}</td>
                     <td>{formatDateTime(b.startDateTime)}</td>
                     <td>{formatDateTime(b.endDateTime)}</td>
                     <td>{b.purpose}</td>
-                    <td>{b.expectedAttendees ?? "-"}</td>
+
                     <td>
-                      <span className={`status-${(b.status || "").toLowerCase()}`}>
+                      <span className={`table-status status-${getStatus(b.status).toLowerCase()}`}>
                         {b.status}
                       </span>
-                    </td>
-                    <td>
-                      {b.status === "APPROVED" && (
-                        <button onClick={() => handleCancel(b.id)}>
-                          Cancel
-                        </button>
-                      )}
-
-                      {b.status === "PENDING" && (
-                        <button onClick={() => handleDelete(b.id)}>
-                          Delete
-                        </button>
-                      )}
                     </td>
                   </tr>
                 ))
               )}
             </tbody>
+
           </table>
         </div>
 
