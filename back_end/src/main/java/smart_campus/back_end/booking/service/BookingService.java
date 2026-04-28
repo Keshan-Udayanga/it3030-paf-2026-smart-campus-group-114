@@ -66,6 +66,7 @@ public class BookingService {
 
         Booking saved = bookingRepository.save(booking);
 
+        //Notification Implementations
         List<User> managers = userRepository.findByRolesContaining("ROLE_RESOURCE_MANAGER");
         List<User> admins = userRepository.findByRolesContaining("ROLE_ADMIN");
 

@@ -2,6 +2,9 @@ package smart_campus.back_end.tickets.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import smart_campus.back_end.auth.model.User;
+import smart_campus.back_end.auth.repository.UserRepository;
+import smart_campus.back_end.notification.service.NotificationService;
 import smart_campus.back_end.tickets.dto.TicketRequestDTO;
 import smart_campus.back_end.tickets.dto.TicketResponseDTO;
 import smart_campus.back_end.tickets.entity.Ticket;
@@ -17,10 +20,16 @@ import java.util.stream.Collectors;
 public class TicketServiceImpl implements TicketService {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private TicketRepository ticketRepository;
 
     @Override
-    public TicketResponseDTO createTicket(TicketRequestDTO ticketRequestDTO) {
+    public TicketResponseDTO createTicket(TicketRequestDTO ticketRequestDTO, String userId) {
         Ticket ticket = new Ticket();
         ticket.setTicketCode("TKT-" + UUID.randomUUID().toString().substring(0, 8));
         ticket.setTitle(ticketRequestDTO.getTitle());
@@ -35,8 +44,25 @@ public class TicketServiceImpl implements TicketService {
         ticket.setStatus("OPEN");
         ticket.setCreatedAt(LocalDateTime.now());
         ticket.setUpdatedAt(LocalDateTime.now());
+        ticket.setCreatedBy(userId);
 
-        return mapToResponseDTO(ticketRepository.save(ticket));
+        Ticket saved = ticketRepository.save(ticket);
+
+        //Notification Implementations
+        List<User> managers = userRepository.findByRolesContaining("ROLE_RESOURCE_MANAGER");
+        List<User> admins = userRepository.findByRolesContaining("ROLE_ADMIN");
+
+        String message = "New ticket was raised. TicketCode: " + saved.getTicketCode();
+
+        managers.forEach(u ->
+                notificationService.createNotification(u.getId(), message, "TICKET")
+        );
+
+        admins.forEach(u ->
+                notificationService.createNotification(u.getId(), message, "TICKET")
+        );
+
+        return mapToResponseDTO(saved);
     }
 
     @Override

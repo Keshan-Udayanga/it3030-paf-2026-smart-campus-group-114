@@ -41,6 +41,8 @@ public class Ticket {
     private LocalDateTime updatedAt;
     private LocalDateTime resolvedAt;
 
+    private String createdBy;
+
     // Max 3 attachment references
     private List<String> attachmentIds = new ArrayList<>();
 
@@ -194,5 +196,13 @@ public class Ticket {
 
     public void setAttachmentIds(List<String> attachmentIds) {
         this.attachmentIds = attachmentIds;
+    }
+
+    public void setCreatedBy(String userId){
+        this.createdBy = userId;
+    }
+
+    public String getCreatedBy(){
+        return this.createdBy;
     }
 }
