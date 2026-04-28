@@ -10,6 +10,7 @@ import smart_campus.back_end.auth.service.CustomUserDetails;
 import smart_campus.back_end.booking.dto.BookingResponse;
 import smart_campus.back_end.booking.dto.CreateBookingRequest;
 import smart_campus.back_end.booking.dto.ReviewBookingRequest;
+import smart_campus.back_end.booking.model.Booking;
 import smart_campus.back_end.booking.service.BookingService;
 
 import java.util.List;
@@ -35,7 +36,10 @@ public class BookingController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<BookingResponse>> getMyBookings(@RequestParam String userId) {
+    public ResponseEntity<List<BookingResponse>> getMyBookings(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        String userId = userDetails.getUser().getId();
         return ResponseEntity.ok(bookingService.getMyBookings(userId));
     }
 
@@ -62,4 +66,6 @@ public class BookingController {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }

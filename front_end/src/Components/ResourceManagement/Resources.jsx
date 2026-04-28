@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Resources.css";
+import { useNavigate } from "react-router-dom";
+
 
 const Resources = () => {
-  const navigate = useNavigate();
-
   const [resources, setResources] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
 
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFrom, setTimeFrom] = useState("");
   const [timeTo, setTimeTo] = useState("");
 
+  // 🔥 FETCH RESOURCES
   const fetchResources = () => {
     setLoading(true);
-    axios.get("http://localhost:8080/api/resources")
+
+    axios
+      .get("http://localhost:8080/api/resources", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
       .then((res) => {
         setResources(Array.isArray(res.data) ? res.data : []);
         setLoading(false);
@@ -26,20 +33,62 @@ const Resources = () => {
       });
   };
 
-  useEffect(() => {
-    fetchResources();
-  }, []);
-
-  const isAvailable = (resourceId, from, to) => {
-    // Dummy implementation for now
-    return true;
+  // 🔥 FETCH BOOKINGS (FIXED API)
+  const fetchBookings = () => {
+    axios
+      .get("http://localhost:8080/api/bookings", { // ✅ FIXED
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
+      .then((res) => {
+        console.log("🔥 BOOKINGS:", res.data); // debug
+        setBookings(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => {
+        console.error("Error fetching bookings:", err);
+      });
   };
 
-  // 🔥 FILTERED RESOURCES (search + availability)
+  useEffect(() => {
+    fetchResources();
+    fetchBookings();
+  }, []);
+
+  // 🔥 TIME NORMALIZE FUNCTION (IMPORTANT)
+  const normalizeDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  };
+
+  // 🔥 CHECK AVAILABILITY (FINAL FIX)
+  const isAvailable = (resourceId, userFrom, userTo) => {
+    if (!userFrom || !userTo) return true;
+
+    const from = normalizeDate(userFrom);
+    const to = normalizeDate(userTo);
+
+    return !bookings.some((b) => {
+      if (String(b.resourceId) !== String(resourceId)) return false;
+      if (b.status === "CANCELLED" || b.status === "REJECTED") return false;
+
+      const bStart = new Date(b.startDateTime);
+      const bEnd = new Date(b.endDateTime);
+
+      console.log("Compare:", {
+        resourceId,
+        booking: b,
+        userFrom: from,
+        userTo: to,
+      });
+
+      return from < bEnd && to > bStart;
+    });
+  };
+
+  // 🔥 FILTERED RESOURCES
   const filteredResources = resources.filter((res) => {
     const matchesSearch =
-      (res.name && res.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (res.type && res.type.toLowerCase().includes(searchTerm.toLowerCase()));
+      res.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      res.type.toLowerCase().includes(searchTerm.toLowerCase());
 
     const available = isAvailable(res.id, timeFrom, timeTo);
 
@@ -105,7 +154,11 @@ const Resources = () => {
               <tbody>
                 {filteredResources.length > 0 ? (
                   filteredResources.map((res) => {
-                    const available = isAvailable(res.id);
+                    const available = isAvailable(
+                      res.id,
+                      timeFrom,
+                      timeTo
+                    );
 
                     return (
                       <tr key={res.id}>
@@ -119,7 +172,13 @@ const Resources = () => {
                         <td>{res.location}</td>
 
                         <td>
-                          <span className={`status-pill ${res.status === 'ACTIVE' ? 'active' : 'inactive'}`}>
+                          <span
+                            className={`status-pill ${
+                              res.status === "ACTIVE"
+                                ? "active"
+                                : "inactive"
+                            }`}
+                          >
                             {res.status}
                           </span>
                         </td>

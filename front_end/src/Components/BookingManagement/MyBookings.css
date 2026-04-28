@@ -122,42 +122,46 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 14px;
-  position: relative;
-  background: white;
   font-weight: 800;
   font-size: 2rem;
   color: #111827;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
+/* inner white center */
 .circle::before {
   content: "";
   position: absolute;
-  inset: 8px;
+  inset: 15px;
   border-radius: 50%;
   background: #f5f7fb;
 }
 
+/* number above everything */
 .circle span {
   position: relative;
   z-index: 2;
 }
 
+/* FIXED COLORS */
 .total-circle {
-  background: conic-gradient(#0f172a 0deg 360deg, #e5e7eb 360deg);
+  background: conic-gradient(#0f172a 0% 100%);
 }
 
 .pending-circle {
-  background: conic-gradient(#f59e0b 0deg 220deg, #e5e7eb 220deg 360deg);
+  background: conic-gradient(#f59e0b 0% 40%, #e5e7eb 40% 100%);
 }
 
 .approved-circle {
-  background: conic-gradient(#10b981 0deg 110deg, #e5e7eb 110deg 360deg);
+  background: conic-gradient(#10b981 0% 65%, #e5e7eb 65% 100%);
 }
 
 .rejected-circle {
-  background: conic-gradient(#ef4444 0deg 140deg, #e5e7eb 140deg 360deg);
+  background: conic-gradient(#ef4444 0% 50%, #e5e7eb 50% 100%);
 }
+
 
 .stat-card p {
   color: #111827;
@@ -183,7 +187,7 @@
 }
 
 .booking-table thead th {
-  background: #f3f4f6;
+  background: var(--primary);
   color: #111827;
   text-align: left;
   font-size: 0.95rem;
@@ -197,6 +201,10 @@
   color: #374151;
   font-size: 0.97rem;
   vertical-align: middle;
+}
+
+.booking-table tbody tr:hover {
+  background: var(--secondary);
 }
 
 .table-status {
