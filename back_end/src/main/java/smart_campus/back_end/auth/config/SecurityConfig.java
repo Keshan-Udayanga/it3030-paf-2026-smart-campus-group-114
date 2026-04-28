@@ -72,6 +72,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/resources/**")
                         .hasAnyRole("RESOURCE_MANAGER")
 
+                        .requestMatchers("/api/v1/tickets/**")
+                        .hasAnyRole("USER")
+
+                        .requestMatchers("/api/v1/comments/**")
+                        .hasAnyRole("TECHNICIAN")
+
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
