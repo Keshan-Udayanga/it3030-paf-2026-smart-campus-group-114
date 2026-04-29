@@ -37,6 +37,12 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toUserResponse(userList));
     }
 
+    @GetMapping("/technicians")
+    public ResponseEntity<List<UserResponse>> getTechnicians() {
+        List<User> technicians = userService.getUsersByRole("ROLE_TECHNICIAN");
+        return ResponseEntity.ok(userMapper.toUserResponse(technicians));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable String id){
         User user = userService.findById(id);

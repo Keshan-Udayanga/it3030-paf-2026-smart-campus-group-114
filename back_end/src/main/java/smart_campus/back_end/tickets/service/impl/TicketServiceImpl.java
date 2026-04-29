@@ -3,7 +3,7 @@ package smart_campus.back_end.tickets.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import smart_campus.back_end.auth.model.User;
-import smart_campus.back_end.auth.repository.UserRepository;
+import smart_campus.back_end.auth.service.UserService;
 import smart_campus.back_end.notification.service.NotificationService;
 import smart_campus.back_end.tickets.dto.TicketRequestDTO;
 import smart_campus.back_end.tickets.dto.TicketResponseDTO;
@@ -11,6 +11,7 @@ import smart_campus.back_end.tickets.entity.Ticket;
 import smart_campus.back_end.tickets.repository.TicketRepository;
 import smart_campus.back_end.tickets.service.TicketService;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class TicketServiceImpl implements TicketService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private NotificationService notificationService;
@@ -49,8 +50,8 @@ public class TicketServiceImpl implements TicketService {
         Ticket saved = ticketRepository.save(ticket);
 
         //Notification Implementations
-        List<User> managers = userRepository.findByRolesContaining("ROLE_RESOURCE_MANAGER");
-        List<User> admins = userRepository.findByRolesContaining("ROLE_ADMIN");
+        List<User> managers = userService.getUsersByRole("ROLE_RESOURCE_MANAGER");
+        List<User> admins = userService.getUsersByRole("ROLE_ADMIN");
 
         String message = "New ticket was raised. TicketCode: " + saved.getTicketCode();
 
@@ -85,7 +86,13 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        ticket.setAssignedTechnician(updatedTicketDTO.getAssignedTechnician());
+        //Notification purposes
+        String oldTechnician = ticket.getAssignedTechnician();
+        String oldStatus = ticket.getStatus();
+
+        String technicianID = updatedTicketDTO.getAssignedTechnician();
+        User tech = userService.findById(technicianID);
+        ticket.setAssignedTechnician(tech.getName());
         
         // SLA: Set resolvedAt if status changes to RESOLVED
         if ("RESOLVED".equals(updatedTicketDTO.getStatus()) && !"RESOLVED".equals(ticket.getStatus())) {
@@ -98,6 +105,24 @@ public class TicketServiceImpl implements TicketService {
         ticket.setResolutionNotes(updatedTicketDTO.getResolutionNotes());
         ticket.setRejectionReason(updatedTicketDTO.getRejectionReason());
         ticket.setUpdatedAt(LocalDateTime.now());
+
+        //Notification Implementation
+        // 1. Technician assigned
+        if (technicianID != null && !technicianID.equals(oldTechnician)) {
+            String messageToTech = "You are assigned to TicketCode:" + ticket.getTicketCode();
+            notificationService.createNotification(technicianID, messageToTech, "TICKET");
+
+            String messageToUser = "Technician is assigned to TicketCode: " + ticket.getTicketCode();
+            notificationService.createNotification(ticket.getCreatedBy(), messageToUser, "TICKET");
+        }
+
+        // 2. Status changed
+        if (updatedTicketDTO.getStatus() != null &&
+                !updatedTicketDTO.getStatus().equals(oldStatus)) {
+
+            String messageToUser = "Status of ticket " + ticket.getTicketCode() + " changed to " + ticket.getStatus();
+            notificationService.createNotification(ticket.getCreatedBy(), messageToUser, "TICKET");
+        }
 
         return mapToResponseDTO(ticketRepository.save(ticket));
     }
