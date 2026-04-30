@@ -2,8 +2,10 @@ package smart_campus.back_end.tickets.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import smart_campus.back_end.auth.service.CustomUserDetails;
 import smart_campus.back_end.tickets.dto.TicketRequestDTO;
 import smart_campus.back_end.tickets.dto.TicketResponseDTO;
 import smart_campus.back_end.tickets.service.TicketService;
@@ -19,8 +21,9 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketResponseDTO> createTicket(@Valid @RequestBody TicketRequestDTO ticketRequestDTO) {
-        return ResponseEntity.ok(ticketService.createTicket(ticketRequestDTO));
+    public ResponseEntity<TicketResponseDTO> createTicket(@Valid @RequestBody TicketRequestDTO ticketRequestDTO, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId();
+        return ResponseEntity.ok(ticketService.createTicket(ticketRequestDTO, userId));
     }
 
     @GetMapping
@@ -44,5 +47,11 @@ public class TicketController {
     public ResponseEntity<String> deleteTicket(@PathVariable String id) {
         ticketService.deleteTicket(id);
         return ResponseEntity.ok("Ticket deleted successfully");
+    }
+
+    @GetMapping("/my")
+    public List<TicketResponseDTO> getMyTickets(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId(); // or extract from JWT properly
+        return ticketService.getTicketsByUserId(userId);
     }
 }

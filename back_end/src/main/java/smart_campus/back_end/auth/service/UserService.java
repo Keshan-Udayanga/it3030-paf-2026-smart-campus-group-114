@@ -37,4 +37,8 @@ public class UserService {
 
         userRepository.deleteById(id);
     }
+
+    public List<User> getUsersByRole(String technician) {
+        return userRepository.findByRolesContaining(technician);
+    }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./TicketForm.css";
@@ -116,6 +116,26 @@ function TicketForm() {
     }
   };
 
+  useEffect(() => {
+          fetchResources();
+      }, []);
+
+  //To save the Resources
+    const [resources, setResources] = useState([]);
+
+  //Fetch Resources
+    const fetchResources = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await axios.get("http://localhost:8080/api/resources", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setResources(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
   return (
     <div className="form-container">
 
@@ -183,13 +203,18 @@ function TicketForm() {
         </div>
 
         <div className="form-group">
-          <input
-            type="text"
-            name="resourceName"
-            placeholder="Resource Name"
-            value={formData.resourceName}
-            onChange={handleChange}
-          />
+          <select 
+              name="resourceName"  
+              value={formData.resourceName} 
+              onChange={handleChange}
+          >
+              <option value="">Select Resource</option>
+              {resources.map(t => (
+                  <option key={t.id} value={t.id}>
+                      {t.name}
+                  </option>
+              ))}
+          </select>
         </div>
 
         <div className="form-group">

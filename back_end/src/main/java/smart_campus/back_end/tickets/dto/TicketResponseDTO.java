@@ -29,4 +29,5 @@ public class TicketResponseDTO {
     private List<String> attachmentIds;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String createdBy;
 }

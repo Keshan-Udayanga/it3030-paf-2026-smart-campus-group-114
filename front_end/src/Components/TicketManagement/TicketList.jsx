@@ -15,8 +15,12 @@ function TicketList() {
     const [searchTerm, setSearchTerm] = useState("");
     const [activeTab, setActiveTab] = useState("all"); // "all", "unassigned", "assigned"
 
+    //To save the technicians
+    const [technicians, setTechnicians] = useState([]);
+
     useEffect(() => {
         fetchTickets();
+        fetchTechnicians();
     }, []);
 
     const fetchTickets = () => {
@@ -30,6 +34,19 @@ function TicketList() {
             .catch((err) => {
                 console.error(err);
             });
+    };
+
+    //Fetch Technicians
+    const fetchTechnicians = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await axios.get("http://localhost:8080/api/v1/users/technicians", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setTechnicians(res.data);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleEdit = (ticket) => {
@@ -254,11 +271,17 @@ function TicketList() {
                         
                         <div className="popup-field">
                             <label>Assigned Technician</label>
-                            <input 
-                                placeholder="Enter Technician Name" 
+                            <select 
                                 value={technician} 
-                                onChange={(e) => setTechnician(e.target.value)} 
-                            />
+                                onChange={(e) => setTechnician(e.target.value)}
+                            >
+                                <option value="">Select Technician</option>
+                                {technicians.map(t => (
+                                    <option key={t.id} value={t.id}>
+                                        {t.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="popup-field">

@@ -2,8 +2,13 @@ package smart_campus.back_end.tickets.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import smart_campus.back_end.auth.model.User;
+import smart_campus.back_end.auth.service.UserService;
+import smart_campus.back_end.notification.service.NotificationService;
 import smart_campus.back_end.tickets.dto.CommentDTO;
+import smart_campus.back_end.tickets.dto.TicketResponseDTO;
 import smart_campus.back_end.tickets.entity.Comment;
+import smart_campus.back_end.tickets.entity.Ticket;
 import smart_campus.back_end.tickets.repository.CommentRepository;
 import smart_campus.back_end.tickets.service.CommentService;
 
@@ -17,8 +22,17 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private TicketServiceImpl ticketService;
+
     @Override
-    public CommentDTO addComment(CommentDTO commentDTO) {
+    public CommentDTO addComment(CommentDTO commentDTO, String userId) {
         Comment comment = new Comment(
                 commentDTO.getTicketId(),
                 commentDTO.getAuthorName(),
@@ -26,6 +40,30 @@ public class CommentServiceImpl implements CommentService {
                 commentDTO.getContent()
         );
         Comment savedComment = commentRepository.save(comment);
+
+        //Notification Implementation
+        TicketResponseDTO ticket = ticketService.getTicketById(commentDTO.getTicketId());
+        User createdBy = userService.findById(ticket.getCreatedBy());
+
+        if(createdBy.getId().equals(userId)){
+            //Notification Implementations
+            List<User> managers = userService.getUsersByRole("ROLE_RESOURCE_MANAGER");
+            List<User> admins = userService.getUsersByRole("ROLE_ADMIN");
+
+            String message = "New comment was added. TicketCode: " + ticket.getTicketCode();
+
+            managers.forEach(u ->
+                    notificationService.createNotification(u.getId(), message, "COMMENT")
+            );
+
+            admins.forEach(u ->
+                    notificationService.createNotification(u.getId(), message, "COMMENT")
+            );
+        }else{
+            String message = "New comment was added. TicketCode: " + ticket.getTicketCode();
+            notificationService.createNotification(userId, message, "COMMENT");
+        }
+
         return mapToDTO(savedComment);
     }
 

@@ -16,7 +16,7 @@ function MyTickets() {
         try {
             const token = localStorage.getItem("token");
             // For now fetching all, but in real app we filter by logged in user
-            const res = await axios.get("http://localhost:8080/api/v1/tickets", {
+            const res = await axios.get("http://localhost:8080/api/v1/tickets/my", {
                 headers: { Authorization: `Bearer ${token}` }
                 });
             setTickets(res.data);

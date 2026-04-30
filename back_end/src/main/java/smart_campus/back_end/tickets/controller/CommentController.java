@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import smart_campus.back_end.auth.service.CustomUserDetails;
 import smart_campus.back_end.tickets.dto.CommentDTO;
 import smart_campus.back_end.tickets.service.CommentService;
 
@@ -20,8 +22,9 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommentDTO> addComment(@Valid @RequestBody CommentDTO commentDTO) {
-        return new ResponseEntity<>(commentService.addComment(commentDTO), HttpStatus.CREATED);
+    public ResponseEntity<CommentDTO> addComment(@Valid @RequestBody CommentDTO commentDTO, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId();
+        return new ResponseEntity<>(commentService.addComment(commentDTO, userId), HttpStatus.CREATED);
     }
 
     @GetMapping("/ticket/{ticketId}")
