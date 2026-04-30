@@ -1,0 +1,173 @@
+/* Summary.css */
+
+.summary-page {
+  padding: 2rem;
+  background: #f4f6f9;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary-page h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #3498db;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Table Styles */
+.summary-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.summary-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.summary-table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-table td {
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+  font-weight: 500;
+}
+
+.summary-table tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease;
+}
+
+.summary-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-cancelled {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+/* Value styling */
+.value-highlight {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .summary-page {
+    padding: 1rem;
+  }
+  
+  .summary-page h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .summary-table-container {
+    width: 95%;
+    overflow-x: auto;
+  }
+  
+  .summary-table {
+    font-size: 0.85rem;
+    min-width: 500px;
+  }
+  
+  .summary-table th,
+  .summary-table td {
+    padding: 0.75rem 1rem;
+  }
+  
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+  }
+}
+
+/* Zebra striping for better readability */
+.summary-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* First column styling */
+.summary-table td:first-child,
+.summary-table th:first-child {
+  font-weight: 600;
+}
+
+/* Last row total styling */
+.summary-table tfoot {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.summary-table tfoot td {
+  padding: 1rem 1.5rem;
+  border-top: 2px solid #dee2e6;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Optional: Add icons to table headers */
+.summary-table th:nth-child(1)::before {
+  content: "📊 ";
+}
+
+.summary-table th:nth-child(2)::before {
+  content: "📈 ";
+}
+
+.summary-table th:nth-child(3)::before {
+  content: "🏷️ ";
+}

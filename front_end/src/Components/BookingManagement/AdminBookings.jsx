@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./AdminBookings.css";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [resources, setResources] = useState({});
   const [rejectReasons, setRejectReasons] = useState({});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -69,7 +71,7 @@ function AdminBookings() {
   useEffect(() => {
     setLoading(true);
     Promise.all([loadBookings(), loadResources()]).finally(() =>
-      setLoading(false)
+      setLoading(false),
     );
   }, []);
 
@@ -91,7 +93,7 @@ function AdminBookings() {
       await axios.patch(
         `http://localhost:8080/api/bookings/${id}/review`,
         { decision: "APPROVED" },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       await Swal.fire({
@@ -142,7 +144,7 @@ function AdminBookings() {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       await Swal.fire({
@@ -180,12 +182,9 @@ function AdminBookings() {
     if (!result.isConfirmed) return;
 
     try {
-      await axios.delete(
-        `http://localhost:8080/api/bookings/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`http://localhost:8080/api/bookings/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       await Swal.fire({
         icon: "success",
@@ -233,14 +232,18 @@ function AdminBookings() {
   return (
     <div className="admin-bookings-page">
       <div className="admin-bookings-container">
+        <div className="header-row">
+          <h2 className="title">🛠️ Admin Booking Review</h2>
 
-        <h2 className="title">🛠️ Admin Booking Review</h2>
+          <button className="summary-btn" onClick={() => navigate("/admin/booking-summary")}>
+            View Summary
+          </button>
+        </div>
 
         {loading ? (
           <p>Loading...</p>
         ) : (
           <table className="admin-table">
-
             <thead>
               <tr>
                 <th>ID</th>
@@ -258,11 +261,10 @@ function AdminBookings() {
             <tbody>
               {bookings.map((b, i) => (
                 <React.Fragment key={b.id || i}>
-
                   {/* ROW 1 */}
                   <tr className="main-row">
                     <td>{i + 1}</td>
-                    <td>{resources[b.resourceId] || "Loading..."}</td>
+                    <td>{resources[b.resourceId] || "N/A"}</td>
                     <td>{b.userId}</td>
                     <td>{formatDate(b.bookingDate)}</td>
                     <td>{formatDatePart(b.startDateTime)}</td>
@@ -275,12 +277,12 @@ function AdminBookings() {
                   {/* ROW 2 */}
                   <tr className="detail-row">
                     <td colSpan="9">
-
                       <div className="detail-box">
-
                         <div>
                           <strong>Status:</strong>{" "}
-                          <span className={`status-badge ${getStatusClass(b.status)}`}>
+                          <span
+                            className={`status-badge ${getStatusClass(b.status)}`}
+                          >
                             {b.status}
                           </span>
                         </div>
@@ -303,10 +305,8 @@ function AdminBookings() {
                         {/* ✅ UPDATED ACTIONS */}
                         <div>
                           <strong>Actions:</strong>{" "}
-
                           {b.status === "PENDING" && (
                             <div className="admin-actions">
-
                               <button
                                 className="approve-btn"
                                 onClick={() => handleApprove(b.id)}
@@ -320,10 +320,8 @@ function AdminBookings() {
                               >
                                 Reject
                               </button>
-
                             </div>
                           )}
-
                           {b.status !== "PENDING" && (
                             <button
                               className="delete-btn"
@@ -332,21 +330,15 @@ function AdminBookings() {
                               Delete
                             </button>
                           )}
-
                         </div>
-
                       </div>
-
                     </td>
                   </tr>
-
                 </React.Fragment>
               ))}
             </tbody>
-
           </table>
         )}
-
       </div>
     </div>
   );

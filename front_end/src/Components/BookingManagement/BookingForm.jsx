@@ -10,9 +10,25 @@ const getLocalDate = () => {
   return new Date(now - offset).toISOString().split("T")[0];
 };
 
+// 🔐 GET USER FROM JWT TOKEN
+const getUserFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return "UNKNOWN_USER";
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.sub || "UNKNOWN_USER"; // email eka
+  } catch (err) {
+    console.log("Token decode error", err);
+    return "UNKNOWN_USER";
+  }
+};
+
 function BookingForm() {
   const { id } = useParams();
-  const userId = "USER001";
+
+  // ✅ FIXED (NO HARDCODE)
+  const userId = getUserFromToken();
 
   const today = getLocalDate();
 
@@ -43,14 +59,17 @@ function BookingForm() {
 
   // ---------------- RESET ----------------
   const resetForm = () => {
-    setFormData(initialState);
+    setFormData({
+      ...initialState,
+      userId: getUserFromToken() // ensure reset also keeps correct user
+    });
     setMessage("");
     setError("");
   };
 
-  // ✅ FORMATTERS (MAIN FIX 🔥)
+  // ✅ FORMATTERS
   const formatDate = (dateTime) => {
-    return dateTime.split("T")[0]; // → yyyy-MM-dd
+    return dateTime.split("T")[0];
   };
 
   const formatDateTime = (dateTime) => {
@@ -67,7 +86,6 @@ function BookingForm() {
     setLoading(true);
 
     try {
-      // ❗ VALIDATION
       if (!formData.startDateTime || !formData.endDateTime) {
         setError("Please select start and end time");
         setLoading(false);
@@ -82,16 +100,13 @@ function BookingForm() {
 
       const payload = {
         resourceId: id,
-        userId: userId,
+        userId: userId, // ✅ dynamic
 
-        // ✅ FIXED
         bookingDate: formatDate(formData.startDateTime),
-
         startDateTime: formatDateTime(formData.startDateTime),
         endDateTime: formatDateTime(formData.endDateTime),
 
         purpose: formData.purpose,
-
         expectedAttendees: formData.expectedAttendees
           ? Number(formData.expectedAttendees)
           : null
@@ -111,7 +126,10 @@ function BookingForm() {
       );
 
       setMessage("🎉 Booking created successfully!");
-      setFormData(initialState);
+      setFormData({
+        ...initialState,
+        userId: getUserFromToken()
+      });
 
     } catch (err) {
       console.log("❌ ERROR:", err.response?.data);

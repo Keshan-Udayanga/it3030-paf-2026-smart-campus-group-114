@@ -3,17 +3,17 @@ import axios from "axios";
 import "./Resources.css";
 import { useNavigate } from "react-router-dom";
 
-
 const Resources = () => {
   const [resources, setResources] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFrom, setTimeFrom] = useState("");
   const [timeTo, setTimeTo] = useState("");
+
+  const [showAlert, setShowAlert] = useState(false);
 
   // 🔥 FETCH RESOURCES
   const fetchResources = () => {
@@ -21,7 +21,7 @@ const Resources = () => {
 
     axios
       .get("http://localhost:8080/api/resources", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         setResources(Array.isArray(res.data) ? res.data : []);
@@ -36,8 +36,9 @@ const Resources = () => {
   // 🔥 FETCH BOOKINGS (FIXED API)
   const fetchBookings = () => {
     axios
-      .get("http://localhost:8080/api/bookings", { // ✅ FIXED
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      .get("http://localhost:8080/api/bookings", {
+        // ✅ FIXED
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         console.log("🔥 BOOKINGS:", res.data); // debug
@@ -56,7 +57,6 @@ const Resources = () => {
   // 🔥 TIME NORMALIZE FUNCTION (IMPORTANT)
   const normalizeDate = (dateStr) => {
     const date = new Date(dateStr);
-    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
   };
 
   // 🔥 CHECK AVAILABILITY (FINAL FIX)
@@ -70,8 +70,11 @@ const Resources = () => {
       if (String(b.resourceId) !== String(resourceId)) return false;
       if (b.status === "CANCELLED" || b.status === "REJECTED") return false;
 
-      const bStart = new Date(b.startDateTime);
-      const bEnd = new Date(b.endDateTime);
+      const bStart = new Date(b.startDateTime).getTime();
+      const bEnd = new Date(b.endDateTime).getTime();
+
+      const fromTime = new Date(userFrom).getTime();
+      const toTime = new Date(userTo).getTime();
 
       console.log("Compare:", {
         resourceId,
@@ -80,7 +83,7 @@ const Resources = () => {
         userTo: to,
       });
 
-      return from < bEnd && to > bStart;
+      return fromTime < bEnd && toTime > bStart;
     });
   };
 
@@ -154,11 +157,7 @@ const Resources = () => {
               <tbody>
                 {filteredResources.length > 0 ? (
                   filteredResources.map((res) => {
-                    const available = isAvailable(
-                      res.id,
-                      timeFrom,
-                      timeTo
-                    );
+                    const available = isAvailable(res.id, timeFrom, timeTo);
 
                     return (
                       <tr key={res.id}>
@@ -174,9 +173,7 @@ const Resources = () => {
                         <td>
                           <span
                             className={`status-pill ${
-                              res.status === "ACTIVE"
-                                ? "active"
-                                : "inactive"
+                              res.status === "ACTIVE" ? "active" : "inactive"
                             }`}
                           >
                             {res.status}
@@ -188,7 +185,13 @@ const Resources = () => {
                             <button
                               className="btn-book"
                               disabled={!available}
-                              onClick={() => navigate(`/booking/${res.id}`)}
+                              onClick={() => {
+                                if (res.status === "OUT_OF_SERVICE") {
+                                  setShowAlert(true);
+                                  return;
+                                }
+                                navigate(`/booking/${res.id}`);
+                              }}
                             >
                               Book
                             </button>
@@ -209,6 +212,19 @@ const Resources = () => {
           )}
         </div>
       </div>
+
+      {showAlert && (
+        <div className="custom-alert-overlay">
+          <div className="custom-alert-box">
+            <h3>⚠️ Out of Service</h3>
+            <p>This resource is currently unavailable for booking.</p>
+
+            <button className="alert-btn" onClick={() => setShowAlert(false)}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
