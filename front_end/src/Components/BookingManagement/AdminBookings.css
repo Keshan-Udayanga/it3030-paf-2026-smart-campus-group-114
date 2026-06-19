@@ -1,392 +1,237 @@
 .admin-bookings-page {
   width: 100%;
   min-height: 100vh;
-  padding: 40px 24px;
-  background: linear-gradient(135deg, #f0f9ff 0%, #f1f5f9 100%);
+  padding: 40px 30px;
+  background-color: var(--background);
 }
 
 .admin-bookings-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.title {
-  font-size: 2rem;
-  margin-bottom: 28px;
-  color: #0f172a;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+.header-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--secondary-dark);
 }
 
-.title::before {
-  content: "📋";
+.title {
   font-size: 1.8rem;
+  color: var(--text-dark);
+  font-weight: 700;
+  margin: 0;
 }
 
-/* =========================
-   🎨 PRETTIER FILTERS - SEPARATED BUTTONS
-   ========================= */
+.summary-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
 
-/* Filter container - removed glass background, buttons stand alone */
+.summary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* ==========================================
+   🎨 FILTERS
+   ========================================== */
 .filter-buttons {
   display: flex;
-  gap: 15px;
-  margin-bottom: 32px;
+  gap: 12px;
+  margin-bottom: 25px;
   flex-wrap: wrap;
 }
 
-/* Individual filter buttons - each as independent card */
 .filter-buttons button {
-  padding: 12px 32px;
-  border: none;
-  border-radius: 50px;
+  padding: 10px 24px;
+  border: 1px solid var(--secondary-dark);
+  border-radius: 30px;
   cursor: pointer;
-  background: white;
-  font-size: 0.9rem;
+  background: #ffffff;
+  font-size: 0.85rem;
   font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #475569;
-  position: relative;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(5px);
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
 }
 
-/* Different colors for each button in default state */
-.filter-buttons button:nth-child(1) {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border-left: 4px solid #3b82f6;
-}
-
-.filter-buttons button:nth-child(2) {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border-left: 4px solid #f59e0b;
-}
-
-.filter-buttons button:nth-child(3) {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border-left: 4px solid #10b981;
-}
-
-.filter-buttons button:nth-child(4) {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border-left: 4px solid #ef4444;
-}
-
-/* Button hover effect */
 .filter-buttons button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+  border-color: var(--primary);
 }
 
-/* Active filter button - overrides with gradient */
+/* Active filter button styles */
 .active-filter {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
+  background: var(--primary) !important;
   color: white !important;
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-  transform: translateY(-2px);
-  border-left: 4px solid #ffffff !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
 }
 
-.active-filter:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5);
-}
-
-/* Active state individual colors */
-.filter-buttons button:nth-child(1).active-filter {
-  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-}
-
-.filter-buttons button:nth-child(2).active-filter {
-  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
-}
-
-.filter-buttons button:nth-child(3).active-filter {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-}
-
-.filter-buttons button:nth-child(4).active-filter {
-  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-}
-
-/* Icons for each button */
-.filter-buttons button:nth-child(1)::before {
-  content: "📊 ";
-  font-size: 1rem;
-}
-
-.filter-buttons button:nth-child(2)::before {
-  content: "⏳ ";
-  font-size: 1rem;
-}
-
-.filter-buttons button:nth-child(3)::before {
-  content: "✓ ";
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.filter-buttons button:nth-child(4)::before {
-  content: "✗ ";
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-/* Active filter icon color */
-.active-filter::before {
-  color: white !important;
-}
-
-/* Optional: Add separator between buttons */
-.filter-buttons button:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 30px;
-  background: linear-gradient(to bottom, transparent, #cbd5e1, transparent);
-}
-
-/* Remove separator for last button */
-.filter-buttons button:last-child::after {
-  display: none;
-}
-
-/* TABLE */
+/* ==========================================
+   📋 TABLE
+   ========================================== */
 .admin-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(16, 185, 129, 0.1);
 }
 
-/* HEADER */
 .admin-table th {
-  background: #1e293b;
-  color: #e2e8f0;
-  font-weight: 600;
-  font-size: 0.8rem;
-  padding: 16px 14px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  border-bottom: 1px solid #334155;
-}
-
-/* Reduce width of Status and Actions columns */
-.admin-table th:nth-child(3),
-.admin-table td:nth-child(3),
-.admin-table th:nth-child(4),
-.admin-table td:nth-child(4) {
-  width: 1%;
-  white-space: nowrap;
-}
-
-/* Bold specific column headers */
-.admin-table th:nth-child(3),
-.admin-table th:nth-child(4),
-.admin-table th:nth-child(5) {
-  font-weight: 800;
+  background: var(--primary);
   color: white;
-  background: #0f172a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 16px 20px;
+  text-align: left;
 }
 
-.admin-table th:first-child {
-  border-top-left-radius: 24px;
-}
-
-.admin-table th:last-child {
-  border-top-right-radius: 24px;
-}
-
-/* CELLS */
 .admin-table td {
-  padding: 16px 14px;
-  border-bottom: 1px solid #eef2ff;
-  font-size: 0.85rem;
-  vertical-align: middle;
-  background-color: white;
-  transition: background 0.2s;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  color: var(--text-dark);
 }
 
-/* Status cell - reduce padding */
-.admin-table td:nth-child(3),
-.admin-table td:nth-child(4) {
-  padding: 16px 8px;
-}
-
-/* MAIN ROW */
 .main-row {
-  transition: all 0.2s;
+  transition: background 0.2s ease;
 }
 
 .main-row:hover {
-  background: #f8fafc;
+  background: #f8fbf9;
 }
 
-.main-row:hover td {
-  background: #f8fafc;
+.detail-row td {
+  padding: 0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-/* =========================
-   🔥 MODERN DETAIL GRID
-   ========================= */
-
+/* ==========================================
+   🔥 DETAIL GRID
+   ========================================== */
 .detail-box {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px 24px;
-  padding: 8px 4px;
+  gap: 20px;
+  padding: 20px;
+  background-color: #fafdfb;
 }
 
-/* EACH COLUMN BLOCK */
 .detail-box > div {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: #fefefe;
-  padding: 12px 14px;
-  border-radius: 16px;
-  border: 1px solid #f1f5f9;
-  transition: all 0.2s;
-}
-
-.detail-box > div:hover {
-  border-color: #cbd5e1;
-  background: #fefefe;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-}
-
-/* LABEL STYLE */
-.detail-box strong {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #64748b;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
   gap: 6px;
 }
 
-/* Custom icons for labels */
-.detail-box strong::before {
-  content: "▹";
-  font-size: 10px;
-  color: #10b981;
+.detail-box strong {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Value text styling */
 .detail-box span:not(.status-badge) {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
   font-weight: 500;
-  color: #0f172a;
-  word-break: break-word;
 }
 
-/* =========================
+.detail-box input {
+  padding: 10px 14px;
+  border: 1px solid var(--secondary-dark);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #ffffff;
+  color: var(--text-dark);
+  outline: none;
+  transition: all 0.3s ease;
+  max-width: 300px;
+}
+
+.detail-box input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+/* ==========================================
    🏷️ STATUS BADGES
-   ========================= */
+   ========================================== */
 .status-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 30px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
   width: fit-content;
-  letter-spacing: 0.3px;
-  text-transform: capitalize;
 }
 
 .status-pending {
-  background: #fffbeb;
-  color: #b45309;
-  border-left: 3px solid #f59e0b;
+  background: #fff3cd;
+  color: #856404;
 }
 
 .status-approved {
-  background: #ecfdf5;
-  color: #047857;
-  border-left: 3px solid #10b981;
+  background: var(--secondary);
+  color: var(--primary-dark);
 }
 
 .status-rejected {
-  background: #fef2f2;
-  color: #b91c1c;
-  border-left: 3px solid #ef4444;
+  background: #f8d7da;
+  color: #721c24;
 }
 
-/* INPUT FIELD MODERN */
-.detail-box input {
-  padding: 8px 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  font-size: 0.8rem;
-  width: 100%;
-  background: #ffffff;
-  transition: all 0.2s;
-  font-weight: 500;
-  color: #0f172a;
+.status-cancelled {
+  background: #e2e3e5;
+  color: #383d41;
 }
 
-.detail-box input:focus {
-  outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-/* ACTION BUTTONS CONTAINER */
+/* ==========================================
+   ⚡ ACTIONS
+   ========================================== */
 .admin-actions {
   display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
-  align-items: center;
+  gap: 10px;
 }
 
-/* BUTTONS GLOBAL STYLES - ALL BUTTONS NOW SAME SIZE */
 .approve-btn,
 .reject-btn,
 .delete-btn {
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
   font-weight: 600;
-  letter-spacing: 0.3px;
-  border-radius: 30px;
-  white-space: nowrap;
-  padding: 5px 12px;
-  font-size: 0.7rem;
-  min-width: 65px;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
 }
 
 .approve-btn {
-  background: #10b981;
+  background: var(--primary);
   color: white;
 }
 
 .approve-btn:hover {
-  background: #059669;
+  background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
 .reject-btn {
@@ -397,342 +242,46 @@
 .reject-btn:hover {
   background: #dc2626;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 .delete-btn {
-  background: #475569;
+  background: #64748b;
   color: white;
+  width: fit-content;
 }
 
 .delete-btn:hover {
-  background: #1e293b;
+  background: #475569;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ADD SMOOTH BORDER & ALTERNATIVE ROW STYLING */
-.admin-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* FOR MODERN CARD-LIKE FEEL */
-.admin-table td:first-child,
-.admin-table th:first-child {
-  padding-left: 20px;
-}
-
-.admin-table td:last-child,
-.admin-table th:last-child {
-  padding-right: 20px;
-}
-
-/* Animation for filter buttons */
-.filter-buttons button {
-  animation: slideIn 0.4s ease;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Stagger animation for each button */
-.filter-buttons button:nth-child(1) { animation-delay: 0s; }
-.filter-buttons button:nth-child(2) { animation-delay: 0.05s; }
-.filter-buttons button:nth-child(3) { animation-delay: 0.1s; }
-.filter-buttons button:nth-child(4) { animation-delay: 0.15s; }
-
-/* =========================
-   📱 RESPONSIVE DESIGN (ADDED WITHOUT CHANGING EXISTING)
-   ========================= */
-
-/* Tablet (768px - 1023px) */
-@media (max-width: 1023px) {
+/* ==========================================
+   📱 RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 1024px) {
   .admin-bookings-page {
-    padding: 30px 20px;
+    padding: 20px 15px;
   }
-  
-  .title {
-    font-size: 1.8rem;
-    margin-bottom: 24px;
-  }
-  
-  .filter-buttons {
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  
-  .filter-buttons button {
-    padding: 10px 24px;
-    font-size: 0.85rem;
-  }
-  
-  .filter-buttons button:not(:last-child)::after {
-    right: -6px;
-    height: 25px;
-  }
-  
-  .admin-table th {
-    padding: 14px 12px;
-    font-size: 0.75rem;
-  }
-  
-  .admin-table td {
-    padding: 14px 12px;
-    font-size: 0.8rem;
-  }
-}
-  
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
 
-.summary-btn {
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.summary-btn:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-
-/* 🔥 RESPONSIVE */
-@media (max-width: 768px) {
-  .detail-box {
-    gap: 16px 20px;
-  }
-  
-  .detail-box > div {
-    padding: 10px 12px;
-  }
-}
-
-/* Mobile Landscape (481px - 767px) */
-@media (max-width: 767px) {
-  .admin-bookings-page {
-    padding: 20px 16px;
-  }
-  
-  .title {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  
-  .title::before {
-    font-size: 1.4rem;
-  }
-  
-  .filter-buttons {
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .filter-buttons button {
-    padding: 8px 18px;
-    font-size: 0.8rem;
-  }
-  
-  .filter-buttons button:not(:last-child)::after {
-    display: none;
-  }
-  
   .admin-table {
     display: block;
     overflow-x: auto;
-    white-space: nowrap;
   }
-  
-  .admin-table th,
-  .admin-table td {
-    padding: 12px 10px;
-    font-size: 0.75rem;
-  }
-  
-  .detail-box {
-    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 768px) {
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
   }
-  
-  .detail-box > div {
-    padding: 10px 10px;
-  }
-  
-  .detail-box strong {
-    font-size: 0.65rem;
-  }
-  
-  .detail-box span:not(.status-badge) {
-    font-size: 0.75rem;
-  }
-  
-  .status-badge {
-    padding: 3px 8px;
-    font-size: 0.65rem;
-  }
-  
-  .admin-actions {
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  
-  .approve-btn,
-  .reject-btn,
-  .delete-btn {
-    padding: 4px 10px;
-    font-size: 0.65rem;
-    min-width: 55px;
-  }
-}
 
-/* Mobile Portrait (320px - 480px) */
-@media (max-width: 480px) {
-  .admin-bookings-page {
-    padding: 16px 12px;
-  }
-  
-  .title {
-    font-size: 1.3rem;
-    margin-bottom: 16px;
-    gap: 8px;
-  }
-  
-  .title::before {
-    font-size: 1.2rem;
-  }
-  
-  .filter-buttons {
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  
-  .filter-buttons button {
-    padding: 6px 14px;
-    font-size: 0.7rem;
-  }
-  
-  .filter-buttons button::before {
-    font-size: 0.8rem;
-  }
-  
-  .admin-table th,
-  .admin-table td {
-    padding: 10px 8px;
-    font-size: 0.7rem;
-  }
-  
-  .admin-table th {
-    font-size: 0.65rem;
-  }
-  
   .detail-box {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 15px;
   }
-  
-  .detail-box > div {
-    padding: 8px 10px;
-    gap: 6px;
-  }
-  
-  .detail-box strong {
-    font-size: 0.6rem;
-  }
-  
-  .detail-box span:not(.status-badge) {
-    font-size: 0.7rem;
-  }
-  
-  .detail-box input {
-    padding: 6px 8px;
-    font-size: 0.7rem;
-  }
-  
-  .status-badge {
-    padding: 2px 6px;
-    font-size: 0.6rem;
-  }
-  
-  .admin-actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-  
-  .approve-btn,
-  .reject-btn,
-  .delete-btn {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 0.7rem;
-    min-width: auto;
-  }
-  
-  .admin-table td:first-child,
-  .admin-table th:first-child {
-    padding-left: 12px;
-  }
-  
-  .admin-table td:last-child,
-  .admin-table th:last-child {
-    padding-right: 12px;
-  }
-}
 
-/* Extra Small Devices (under 360px) */
-@media (max-width: 360px) {
-  .admin-bookings-page {
-    padding: 12px 10px;
+  .detail-box input {
+    max-width: 100%;
   }
-  
-  .title {
-    font-size: 1.1rem;
-  }
-  
-  .filter-buttons button {
-    padding: 5px 12px;
-    font-size: 0.65rem;
-  }
-  
-  .filter-buttons button::before {
-    font-size: 0.7rem;
-  }
-  
-  .admin-table th,
-  .admin-table td {
-    padding: 8px 6px;
-    font-size: 0.65rem;
-  }
-  
-  .detail-box > div {
-    padding: 6px 8px;
-  }
-  
-  .status-badge {
-    padding: 2px 5px;
-    font-size: 0.55rem;
-  }
-  
-  .approve-btn,
-  .reject-btn,
-  .delete-btn {
-    padding: 6px 10px;
-    font-size: 0.65rem;
-  }
-}
+}
